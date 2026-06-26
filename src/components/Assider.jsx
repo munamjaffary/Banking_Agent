@@ -22,6 +22,7 @@ import {
   deleteChat,
 } from "../api/conversationSlice";
 import { toast } from "react-toastify";
+import { jsPDF } from "jspdf";
 
 function Assider({ collapsed, setCollapsed }) {
   const navigate = useNavigate();
@@ -115,6 +116,68 @@ function Assider({ collapsed, setCollapsed }) {
     }
     setRenameId(null);
     setRenameValue("");
+  };
+
+  const handleDownloadChat = (chat) => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 15;
+    const maxWidth = pageWidth - margin * 2;
+    let y = margin;
+
+    const title =
+      chat.messages.length > 0 ? chat.messages[0].content : chat.title;
+    doc.setFontSize(16);
+    doc.text(title, margin, y);
+    y += 8;
+
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    const dateStr = new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    doc.text(`Downloaded: ${dateStr}`, margin, y);
+    y += 10;
+
+    doc.setDrawColor(200);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 8;
+
+    for (const msg of chat.messages) {
+      if (y > 270) {
+        doc.addPage();
+        y = margin;
+      }
+
+      const role = msg.role === "user" ? "You" : "Assistant";
+      doc.setFontSize(11);
+      doc.setFont(undefined, "bold");
+      doc.setTextColor(msg.role === "user" ? "#009591" : "#333333");
+      doc.text(`${role}:`, margin, y);
+      y += 6;
+
+      doc.setFont(undefined, "normal");
+      doc.setFontSize(10);
+      doc.setTextColor(60);
+
+      const lines = doc.splitTextToSize(msg.content || "", maxWidth);
+      for (const line of lines) {
+        if (y > 275) {
+          doc.addPage();
+          y = margin;
+        }
+        doc.text(line, margin, y);
+        y += 5;
+      }
+      y += 4;
+    }
+
+    doc.save(`${title.substring(0, 40)}.pdf`);
+    toast.success("Chat downloaded as PDF");
   };
 
   const handleLogout = () => {
@@ -227,6 +290,15 @@ function Assider({ collapsed, setCollapsed }) {
                             }}
                           >
                             Rename
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setMenuOpenId(null);
+                              handleDownloadChat(chat);
+                            }}
+                          >
+                            Download
                           </button>
                           <button
                             onClick={(e) => {
