@@ -74,6 +74,12 @@ function Assider({ collapsed, setCollapsed }) {
       label: "Document View",
       path: "/documettable",
     },
+    {
+      key: "nlu",
+      icon: GridIcon,
+      label: "NLU Engine",
+      path: "/nlu",
+    },
   ];
 
   const handleTabClick = (tab) => {
