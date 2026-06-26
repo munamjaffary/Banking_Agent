@@ -1,16 +1,26 @@
 import React from "react";
+import { downloadCSV } from "../../../utils/downloadCSV";
 
 const intentBadgeColors = {
-  rates: "#008fd5", hours: "#009591", loans: "#f59e0b",
-  membership: "#8b5cf6", payments: "#10b981", cards: "#ef4444",
-  fraud: "#dc2626", account: "#6366f1", general: "#6b7280",
+  rates: "#008fd5",
+  hours: "#009591",
+  loans: "#f59e0b",
+  membership: "#8b5cf6",
+  payments: "#10b981",
+  cards: "#ef4444",
+  fraud: "#dc2626",
+  account: "#6366f1",
+  general: "#6b7280",
 };
 
 function formatTimestamp(ts) {
   const d = new Date(ts);
   return d.toLocaleDateString("en-US", {
-    month: "short", day: "numeric", year: "numeric",
-    hour: "2-digit", minute: "2-digit",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 }
 
@@ -25,21 +35,40 @@ function MessageDetail({ msg, expanded, onToggle, index }) {
           </span>
         </div>
         <div className="nlu-msg-header-right">
+          {msg.handoff ? (
+            <span
+              className="nlu-handoff-badge handoff-yes"
+              title={msg.handoffReason || ""}
+            >
+              Live Agent
+            </span>
+          ) : (
+            <span className="nlu-handoff-badge handoff-no">AI</span>
+          )}
           <div className="nlu-msg-time">{formatTimestamp(msg.timestamp)}</div>
           {msg.intents.map((intent) => (
             <span
               key={intent.name}
               className="nlu-intent-badge nlu-intent-sm"
-              style={{ backgroundColor: intentBadgeColors[intent.name] || "#6b7280" }}
+              style={{
+                backgroundColor: intentBadgeColors[intent.name] || "#6b7280",
+              }}
             >
-              {Math.round(intent.confidence * 100)}%
+              {intent.name}
             </span>
           ))}
           <div className="nlu-conv-expand-icon">
             <svg
-              width="12" height="12" viewBox="0 0 14 14"
-              fill="none" stroke="currentColor" strokeWidth="2"
-              style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}
+              width="12"
+              height="12"
+              viewBox="0 0 14 14"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              style={{
+                transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
+                transition: "transform 0.2s",
+              }}
             >
               <path d="M2 5L7 10L12 5" />
             </svg>
@@ -64,17 +93,31 @@ function MessageDetail({ msg, expanded, onToggle, index }) {
             </div>
             <div className="nlu-msg-detail-field">
               <span className="nlu-detail-label">Timestamp</span>
-              <span className="nlu-detail-value">{formatTimestamp(msg.timestamp)}</span>
+              <span className="nlu-detail-value">
+                {formatTimestamp(msg.timestamp)}
+              </span>
+            </div>
+            <div className="nlu-msg-detail-field">
+              <span className="nlu-detail-label">Handoff</span>
+              <span className="nlu-detail-value">
+                {msg.handoff
+                  ? `Yes - ${msg.handoffReason || "Transferred to agent"}`
+                  : "No (AI handled)"}
+              </span>
             </div>
             <div className="nlu-msg-detail-field">
               <span className="nlu-detail-label">Intent</span>
               <span className="nlu-detail-value">
-                {msg.intents.map((i) => `${i.name} (${Math.round(i.confidence * 100)}%)`).join(", ")}
+                {msg.intents
+                  .map((i) => `${i.name} (${Math.round(i.confidence * 100)}%)`)
+                  .join(", ")}
               </span>
             </div>
             {msg.references?.length > 0 && (
               <div className="nlu-msg-detail-field nlu-msg-detail-full">
-                <span className="nlu-detail-label">References ({msg.references.length})</span>
+                <span className="nlu-detail-label">
+                  References ({msg.references.length})
+                </span>
                 <ul className="nlu-ref-list">
                   {msg.references.map((ref, idx) => (
                     <li key={idx}>{ref.title}</li>
@@ -83,6 +126,45 @@ function MessageDetail({ msg, expanded, onToggle, index }) {
               </div>
             )}
           </div>
+          <button
+            className="nlu-msg-dl-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              downloadCSV(
+                [
+                  {
+                    EntryID: msg._id,
+                    Query: msg.query,
+                    Response: msg.response,
+                    Intent: msg.intents.map((i) => i.name).join("; "),
+                    Confidence: msg.intents
+                      .map((i) => `${Math.round(i.confidence * 100)}%`)
+                      .join("; "),
+                    Handoff: msg.handoff ? "Live Agent" : "AI",
+                    Timestamp: msg.timestamp,
+                    References:
+                      msg.references?.map((r) => r.title).join("; ") || "",
+                  },
+                ],
+                `entry-${msg._id}`,
+              );
+            }}
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 14 14"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M7 1v8M4 6l3 3 3-3" />
+              <path d="M1 10v2a1 1 0 001 1h10a1 1 0 001-1v-2" />
+            </svg>
+            CSV
+          </button>
         </div>
       )}
     </div>
