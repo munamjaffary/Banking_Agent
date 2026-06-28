@@ -66,8 +66,12 @@ function Assider({ collapsed, setCollapsed }) {
     { key: "newchat", icon: NewChatIcon, label: "New Chat" },
     { key: "chat", icon: FolderIcon, label: "Chats", path: "/chat" },
     { key: "search", icon: SearchIcon, label: "Search", path: "/search" },
-    { key: "dashboard", icon: Dashoard, label: "Dashboard", path: "/" },
-    { key: "activity", icon: Dashoard, label: "Activity", path: "/activity" },
+    {
+      key: "knowledgebase",
+      icon: FolderIcon,
+      label: "Knowledge Base",
+      path: "/",
+    },
     {
       key: "document",
       icon: GridIcon,
@@ -245,82 +249,135 @@ function Assider({ collapsed, setCollapsed }) {
 
                 <div className="section-title">Your chats</div>
                 {conversations.map((chat) => (
-                  <div
-                    key={chat.id}
-                    className={`nav-tabs-button project-item ${activeConvId === chat.id ? "active-chat" : ""}`}
-                    onClick={() => {
-                      if (renameId !== chat.id) handleSelectChat(chat.id);
-                    }}
-                  >
-                    {renameId === chat.id ? (
-                      <input
-                        ref={renameRef}
-                        className="chat-rename-input"
-                        value={renameValue}
-                        onChange={(e) => setRenameValue(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") submitRename();
-                          if (e.key === "Escape") setRenameId(null);
-                        }}
-                        onBlur={submitRename}
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                    ) : (
-                      <span className="tab-label truncate">
-                        {chat.messages.length > 0
-                          ? chat.messages[0].content
-                          : chat.title}
-                      </span>
-                    )}
-
-                    <div className="chat-menu-wrapper">
-                      <button
-                        className="chat-menu-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setMenuOpenId(
-                            menuOpenId === chat.id ? null : chat.id,
-                          );
-                          setRenameId(null);
-                        }}
-                        title="More options"
-                      >
-                        <img src={DotsIcon} alt="more" width="14" height="14" />
-                      </button>
-                      {menuOpenId === chat.id && (
-                        <div className="chat-dropdown-menu">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              startRename(chat);
-                            }}
-                          >
-                            Rename
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setMenuOpenId(null);
-                              handleDownloadChat(chat);
-                            }}
-                          >
-                            Download
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setMenuOpenId(null);
-                              dispatch(deleteChat(chat.id));
-                            }}
-                            className="danger"
-                          >
-                            Delete
-                          </button>
-                        </div>
+                    <div
+                      key={chat.id}
+                      className={`nav-tabs-button project-item ${activeConvId === chat.id ? "active-chat" : ""}`}
+                      onClick={() => {
+                        if (renameId !== chat.id) handleSelectChat(chat.id);
+                      }}
+                    >
+                      {renameId === chat.id ? (
+                        <input
+                          ref={renameRef}
+                          className="chat-rename-input"
+                          value={renameValue}
+                          onChange={(e) => setRenameValue(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") submitRename();
+                            if (e.key === "Escape") setRenameId(null);
+                          }}
+                          onBlur={submitRename}
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      ) : (
+                        <span className="tab-label truncate">
+                          {chat.messages.length > 0
+                            ? chat.messages[0].content
+                            : chat.title}
+                        </span>
                       )}
+
+                      <div className="chat-menu-wrapper">
+                        <button
+                          className="chat-menu-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setMenuOpenId(
+                              menuOpenId === chat.id ? null : chat.id,
+                            );
+                            setRenameId(null);
+                          }}
+                          title="More options"
+                        >
+                          <img src={DotsIcon} alt="more" width="14" height="14" />
+                        </button>
+                        {menuOpenId === chat.id && (
+                          <div className="chat-dropdown-menu">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                startRename(chat);
+                              }}
+                            >
+                              Rename
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setMenuOpenId(null);
+                                handleDownloadChat(chat);
+                              }}
+                            >
+                              Download
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setMenuOpenId(null);
+                                dispatch(deleteChat(chat.id));
+                              }}
+                              className="danger"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+
+                {conversations.filter((c) => c.user_email).length > 0 && (
+                  <>
+                    <div className="section-title">NLU Conversations</div>
+                    {(() => {
+                      const nluChats = conversations.filter(
+                        (c) => c.user_email,
+                      );
+                      const grouped = {};
+                      nluChats.forEach((chat) => {
+                        if (!grouped[chat.user_email])
+                          grouped[chat.user_email] = [];
+                        grouped[chat.user_email].push(chat);
+                      });
+                      return Object.entries(grouped).map(
+                        ([email, chats]) => (
+                          <div key={email} className="nlu-user-group">
+                            <div className="nlu-user-header">
+                              <span className="nlu-user-email-side">
+                                {email}
+                              </span>
+                              <span className="nlu-user-role-side">
+                                {chats[0].user_role}
+                              </span>
+                              <span className="nlu-user-count-side">
+                                {chats.length}
+                              </span>
+                            </div>
+                            {chats.map((chat) => (
+                              <div
+                                key={chat.id}
+                                className={`nav-tabs-button project-item nlu-chat-item ${activeConvId === chat.id ? "active-chat" : ""}`}
+                                onClick={() => {
+                                  if (renameId !== chat.id)
+                                    handleSelectChat(chat.id);
+                                }}
+                              >
+                                <span className="tab-label truncate">
+                                  <span className="nlu-chat-msgs">
+                                    {chat.messageCount} msg
+                                    {chat.messageCount !== 1 ? "s" : ""}
+                                  </span>
+                                  &nbsp;&mdash;&nbsp;
+                                  {chat.title}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        ),
+                      );
+                    })()}
+                  </>
+                )}
               </div>
             )}
           </div>

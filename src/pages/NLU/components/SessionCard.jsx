@@ -30,14 +30,32 @@ function truncate(str, len) {
   return str.length > len ? str.slice(0, len) + "..." : str;
 }
 
+const PAGE_SIZE = 5;
+
 function SessionCard({ session, expanded, onToggle, viewMode }) {
   const [expandedMessages, setExpandedMessages] = useState({});
+  const [msgPage, setMsgPage] = useState(1);
 
   const toggleMessage = (msgId) => {
     setExpandedMessages((prev) => ({ ...prev, [msgId]: !prev[msgId] }));
   };
 
   const handoffCount = session.filteredMessages.filter((m) => m.handoff).length;
+
+  const totalMsgPages = Math.ceil(
+    (session.filteredMessages?.length || 1) / PAGE_SIZE,
+  );
+  const paginatedMessages = (session.filteredMessages || []).slice(
+    (msgPage - 1) * PAGE_SIZE,
+    msgPage * PAGE_SIZE,
+  );
+
+  const roleColors = {
+    Admin: "#8b5cf6",
+    Manager: "#008fd5",
+    Agent: "#009591",
+    Analyst: "#f59e0b",
+  };
 
   return (
     <div className={`nlu-session-card ${expanded ? "is-expanded" : ""}`}>
@@ -57,6 +75,17 @@ function SessionCard({ session, expanded, onToggle, viewMode }) {
               </span>
             </div>
           </div>
+          {session.role && (
+            <span
+              className="nlu-role-badge"
+              style={{
+                backgroundColor:
+                  roleColors[session.role] || "#6b7280",
+              }}
+            >
+              {session.role}
+            </span>
+          )}
           <div className="nlu-session-stats">
             <span className="nlu-stat-badge">
               {session.messageCount} message
@@ -128,48 +157,82 @@ function SessionCard({ session, expanded, onToggle, viewMode }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {session.filteredMessages.map((msg, idx) => (
-                      <tr key={msg._id}>
-                        <td className="nlu-col-num">{idx + 1}</td>
-                        <td className="nlu-col-query" title={msg.query}>
-                          {truncate(msg.query, 70)}
-                        </td>
-                        <td className="nlu-col-intent">
-                          {msg.intents.map((i) => (
-                            <span
-                              key={i.name}
-                              className="nlu-intent-badge nlu-intent-tiny"
-                              style={{
-                                backgroundColor:
-                                  intentBadgeColors[i.name] || "#6b7280",
-                              }}
-                            >
-                              {i.name}
-                            </span>
-                          ))}
-                        </td>
-                        <td className="nlu-col-handoff">
-                          {msg.handoff ? (
-                            <span
-                              className="nlu-handoff-badge handoff-yes"
-                              title={msg.handoffReason || ""}
-                            >
-                              Live Agent
-                            </span>
-                          ) : (
-                            <span className="nlu-handoff-badge handoff-no">
-                              AI
-                            </span>
-                          )}
-                        </td>
-                        <td className="nlu-col-response" title={msg.response}>
-                          {truncate(msg.response, 80)}
-                        </td>
-                      </tr>
-                    ))}
+                    {paginatedMessages.map((msg, idx) => {
+                      const globalIdx =
+                        (msgPage - 1) * PAGE_SIZE + idx + 1;
+                      return (
+                        <tr key={msg._id}>
+                          <td className="nlu-col-num">{globalIdx}</td>
+                          <td className="nlu-col-query" title={msg.query}>
+                            {truncate(msg.query, 70)}
+                          </td>
+                          <td className="nlu-col-intent">
+                            {msg.intents.map((i) => (
+                              <span
+                                key={i.name}
+                                className="nlu-intent-badge nlu-intent-tiny"
+                                style={{
+                                  backgroundColor:
+                                    intentBadgeColors[i.name] || "#6b7280",
+                                }}
+                              >
+                                {i.name}
+                              </span>
+                            ))}
+                          </td>
+                          <td className="nlu-col-handoff">
+                            {msg.handoff ? (
+                              <span
+                                className="nlu-handoff-badge handoff-yes"
+                                title={msg.handoffReason || ""}
+                              >
+                                Live Agent
+                              </span>
+                            ) : (
+                              <span className="nlu-handoff-badge handoff-no">
+                                AI
+                              </span>
+                            )}
+                          </td>
+                          <td
+                            className="nlu-col-response"
+                            title={msg.response}
+                          >
+                            {truncate(msg.response, 80)}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
+              {totalMsgPages > 1 && (
+                <div className="nlu-pagination">
+                  <button
+                    className="nlu-page-btn"
+                    disabled={msgPage <= 1}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMsgPage((p) => Math.max(1, p - 1));
+                    }}
+                  >
+                    &laquo; Prev
+                  </button>
+                  <span className="nlu-page-info">
+                    Page {msgPage} of {totalMsgPages}
+                  </span>
+                  <button
+                    className="nlu-page-btn"
+                    disabled={msgPage >= totalMsgPages}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMsgPage((p) => Math.min(totalMsgPages, p + 1));
+                    }}
+                  >
+                    Next &raquo;
+                  </button>
+                </div>
+              )}
               <div className="nlu-compact-footer">
                 <button
                   className="nlu-session-dl-btn"
@@ -213,16 +276,46 @@ function SessionCard({ session, expanded, onToggle, viewMode }) {
             </>
           ) : (
             <>
-              {session.filteredMessages.map((msg, idx) => (
-                <div key={msg._id} className="nlu-message-row">
-                  <MessageDetail
-                    msg={msg}
-                    expanded={!!expandedMessages[msg._id]}
-                    onToggle={() => toggleMessage(msg._id)}
-                    index={idx}
-                  />
+              {paginatedMessages.map((msg, idx) => {
+                const globalIdx = (msgPage - 1) * PAGE_SIZE + idx;
+                return (
+                  <div key={msg._id} className="nlu-message-row">
+                    <MessageDetail
+                      msg={msg}
+                      expanded={!!expandedMessages[msg._id]}
+                      onToggle={() => toggleMessage(msg._id)}
+                      index={globalIdx}
+                    />
+                  </div>
+                );
+              })}
+              {totalMsgPages > 1 && (
+                <div className="nlu-pagination">
+                  <button
+                    className="nlu-page-btn"
+                    disabled={msgPage <= 1}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMsgPage((p) => Math.max(1, p - 1));
+                    }}
+                  >
+                    &laquo; Prev
+                  </button>
+                  <span className="nlu-page-info">
+                    Page {msgPage} of {totalMsgPages}
+                  </span>
+                  <button
+                    className="nlu-page-btn"
+                    disabled={msgPage >= totalMsgPages}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMsgPage((p) => Math.min(totalMsgPages, p + 1));
+                    }}
+                  >
+                    Next &raquo;
+                  </button>
                 </div>
-              ))}
+              )}
             </>
           )}
         </div>

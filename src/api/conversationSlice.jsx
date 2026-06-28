@@ -60,9 +60,15 @@
 // export default conversationSlice.reducer;
 
 import { createSlice } from "@reduxjs/toolkit";
+import { nluSessionsToChats, rawEntries } from "../data/nluData";
+
+const nluChats = nluSessionsToChats(rawEntries).map((c, i) => ({
+  ...c,
+  id: i + 2,
+}));
 
 const initialState = {
-  conversations: [{ id: 1, title: "New Chat", messages: [] }],
+  conversations: [{ id: 1, title: "New Chat", messages: [] }, ...nluChats],
   activeConvId: 1,
 };
 
@@ -128,6 +134,7 @@ const conversationSlice = createSlice({
         if (references) lastMsg.references = references;
       }
     },
+
   },
 });
 
