@@ -19,6 +19,7 @@ const tableHead = [
   { id: "started_at", label: "Started At", type: "time" },
   { id: "completed_at", label: "Completed At", type: "time" },
   { id: "status", label: "Status" },
+  { id: "extraction_progress", label: "Extraction Progress", type: "progress" },
 ];
 const DocumentView = () => {
   const navigate = useNavigate();
@@ -35,7 +36,10 @@ const DocumentView = () => {
     },
   });
 
-  const tableData = documenttable?.documents || [];
+  const tableData = (documenttable?.documents || []).map((doc) => ({
+    ...doc,
+    extraction_progress: doc.status === "Completed" ? 100 : doc.started_at && !doc.completed_at ? 66 : 0,
+  }));
 
   const [blobRequest] = useLazyBlobRequestQuery();
 
@@ -74,7 +78,7 @@ const DocumentView = () => {
     <div className="bulk-container">
       <div className="documentview-row">
         <p>Recent Document Uploads</p>
-        <button onClick={() => navigate("/documettable")}>View All</button>
+        <button onClick={() => navigate("/portal/documents")}>View All</button>
       </div>
       <TableView
         tableHead={tableHead}

@@ -55,7 +55,7 @@ const useChatManager = () => {
         headers: {
           "Content-Type": "application/json",
           Accept: "text/event-stream",
-          Authorization: `Bearer ${token}`,
+          ...(token && token !== "guest-session" ? { Authorization: `Bearer ${token}` } : {}),
         },
         responseType: "stream",
         adapter: "fetch",

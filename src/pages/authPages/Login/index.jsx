@@ -42,6 +42,7 @@ function Login() {
       }).unwrap();
       dispatch(setToken(response.access_token));
       dispatch(setUser(response.user));
+      sessionStorage.setItem("npfcu_fresh_login", "1");
       toast.success("Welcome back!");
     } catch (err) {
       toast.error(getErrorMessage(err) || "Login failed!");

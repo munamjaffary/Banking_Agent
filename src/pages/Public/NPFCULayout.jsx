@@ -118,7 +118,6 @@ function NPFCULayout({ children }) {
                       {[
                         { label: "Search", path: "/portal/search" },
                         { label: "Knowledge Base", path: "/portal/knowledgebase" },
-                        { label: "Documents", path: "/portal/documents" },
                         { label: "Smart Engine", path: "/portal/nlu" },
                       ].map((item) => (
                         <button
@@ -195,7 +194,10 @@ function NPFCULayout({ children }) {
                         <div style={{ fontWeight: "600", fontSize: "14px", color: "#1B1A16" }}>
                           {user?.username || "User"}
                         </div>
-                        <div style={{ fontSize: "12px", color: "#6B6B6B", marginTop: "2px" }}>
+                        <div style={{ fontSize: "11px", color: "#9C6B3F", marginTop: "1px", fontWeight: "500" }}>
+                          {user?.role || user?.user_type || ""}
+                        </div>
+                        <div style={{ fontSize: "12px", color: "#6B6B6B", marginTop: "3px" }}>
                           {user?.email || ""}
                         </div>
                       </div>

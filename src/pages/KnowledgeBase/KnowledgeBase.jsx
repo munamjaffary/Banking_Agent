@@ -1,14 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import DashboardAnalytics from "./DashboardAnalytics";
 import Activity from "../Activity/Activity";
+import DocumentTable from "../Documents/DocumentTable";
 
 const KB_TABS = [
   { key: "dashboard", label: "Dashboard" },
   { key: "activity", label: "Activity" },
+  { key: "documents", label: "Documents" },
 ];
 
 function KnowledgeBase() {
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const params = new URLSearchParams(location.search);
+  const tabFromUrl = params.get("tab") || "dashboard";
+  const [activeTab, setActiveTab] = useState(tabFromUrl);
+
+  useEffect(() => {
+    setActiveTab(tabFromUrl);
+  }, [tabFromUrl]);
+
+  const handleTabClick = (key) => {
+    navigate(`?tab=${key}`, { replace: true });
+  };
 
   return (
     <main className="dashboard-container">
@@ -22,7 +37,7 @@ function KnowledgeBase() {
           <button
             key={tab.key}
             className={`nlu-tab ${activeTab === tab.key ? "active" : ""}`}
-            onClick={() => setActiveTab(tab.key)}
+            onClick={() => handleTabClick(tab.key)}
           >
             {tab.label}
           </button>
@@ -31,6 +46,7 @@ function KnowledgeBase() {
 
       {activeTab === "dashboard" && <DashboardAnalytics />}
       {activeTab === "activity" && <Activity />}
+      {activeTab === "documents" && <DocumentTable />}
     </main>
   );
 }

@@ -56,6 +56,11 @@ function BulkUpload() {
     endpoint: endpoints.document.documentcategories,
   });
 
+  const { refetch: refetchDocuments } = useGetQuery({
+    endpoint: endpoints.document.documenttable,
+    params: { skip: 0, limit: 5 },
+  });
+
   const [genericMutation] = useGenericMutation();
 
   const createCategory = async (name) => {
@@ -67,7 +72,7 @@ function BulkUpload() {
     try {
       const response = await genericMutation({
         endpoint: endpoints.upload.onecategory,
-        data: { category: name },
+        params: { category: name },
       }).unwrap();
       toast.success(response?.message || "Category created!");
       await refetchCategories();
@@ -94,6 +99,8 @@ function BulkUpload() {
 
   const handleUploadSuccess = (fileName) => {
     toast.success(`${fileName} uploaded successfully!`);
+
+    refetchDocuments();
 
     setFiles((prev) => prev.filter((f) => f.name !== fileName));
 
@@ -148,7 +155,16 @@ function BulkUpload() {
     if (!files.length) return toast.warn("Please add files first");
 
     files.forEach((file) => {
-      uploadProcess(file, category.value, handleUploadSuccess).catch(() => {});
+      uploadProcess(file, category.value, handleUploadSuccess).catch((err) => {
+        console.error("Upload error:", err);
+        const data = err?.data;
+        const status = err?.status || err?.originalStatus || "";
+        const detail = data?.detail;
+        const msg = Array.isArray(detail)
+          ? detail.map((d) => d.msg).join("; ")
+          : detail || data?.message || data?.status || err?.error || (data ? JSON.stringify(data).slice(0, 200) : "Upload failed");
+        toast.error(`${file.name}${status ? ` (${status})` : ""}: ${msg}`);
+      });
     });
   };
 

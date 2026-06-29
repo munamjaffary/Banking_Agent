@@ -76,6 +76,10 @@ const conversationSlice = createSlice({
   name: "conversation",
   initialState,
   reducers: {
+    resetConversations: (state) => {
+      state.conversations = [{ id: Date.now(), title: "New Chat", messages: [] }];
+      state.activeConvId = state.conversations[0].id;
+    },
     createNewChat: (state) => {
       const newId = Date.now();
       state.conversations.unshift({
@@ -105,6 +109,11 @@ const conversationSlice = createSlice({
         state.activeConvId =
           state.conversations.length > 0 ? state.conversations[0].id : null;
       }
+    },
+
+    clearMessages: (state) => {
+      const conv = state.conversations.find((c) => c.id === state.activeConvId);
+      if (conv) conv.messages = [];
     },
 
     addMessage: (state, action) => {
@@ -139,10 +148,12 @@ const conversationSlice = createSlice({
 });
 
 export const {
+  resetConversations,
   createNewChat,
   selectChat,
   renameChat,
   deleteChat,
+  clearMessages,
   addMessage,
   updateLastMessage,
 } = conversationSlice.actions;

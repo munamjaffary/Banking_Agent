@@ -93,7 +93,8 @@ const TableView = ({
             </div>
           </div>
           <button type="button" className="export-btn" onClick={exportData}>
-            <img src={download} alt="export" /> Export CSV
+            <img src={download} alt="export" />
+            <span className="export-label">Export CSV</span>
           </button>
         </div>
       )}
@@ -190,6 +191,25 @@ const TableView = ({
                                 "hh:mm A",
                               )
                             : "----"}
+                        </td>
+                      );
+                    }
+
+                    if (col.type === "progress") {
+                      const pct = Number(value) || 0;
+                      return (
+                        <td key={col.id} className="text-center">
+                          <div className="extraction-progress">
+                            <div className="progress-track">
+                              <div
+                                className="progress-fill"
+                                style={{ width: `${pct}%` }}
+                              />
+                            </div>
+                            <span className="progress-label">
+                              {pct >= 100 ? "Completed" : pct > 0 ? "In Progress" : "Pending"}
+                            </span>
+                          </div>
                         </td>
                       );
                     }

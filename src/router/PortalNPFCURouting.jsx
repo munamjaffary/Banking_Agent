@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import Assider from "../components/Assider";
 import Header from "../components/Header";
 import NPFCULayout from "../pages/Public/NPFCULayout";
@@ -14,17 +16,33 @@ import ChatArea from "../pages/Chat/ChatArea";
 import Search from "../components/Search";
 import KnowledgeBase from "../pages/KnowledgeBase/KnowledgeBase";
 import NLU from "../pages/NLU/NLU";
+import { resetConversations } from "../api/conversationSlice";
 
 function PortalNPFCURouting() {
   const [collapsed, setCollapsed] = useState(true);
+  const dispatch = useDispatch();
+  const done = useRef(false);
+  const location = useLocation();
+  const isPortal = location.pathname.startsWith("/portal");
+
+  useEffect(() => {
+    if (done.current) return;
+    done.current = true;
+    if (sessionStorage.getItem("npfcu_fresh_login")) {
+      sessionStorage.removeItem("npfcu_fresh_login");
+      dispatch(resetConversations());
+    }
+  }, [dispatch]);
 
   return (
     <div className="app-wrapper">
-      <div className={collapsed ? "sidebar-collapsed" : "sidebar-expanded"}>
-        <Assider collapsed={collapsed} setCollapsed={setCollapsed} />
-      </div>
+      {isPortal && (
+        <div className={collapsed ? "sidebar-collapsed" : "sidebar-expanded"}>
+          <Assider collapsed={collapsed} setCollapsed={setCollapsed} />
+        </div>
+      )}
       <div className="dashboard-col">
-        <Header />
+        {isPortal && <Header />}
         <div className="main-content" style={{ padding: 0 }}>
           <NPFCULayout>
             <Routes>

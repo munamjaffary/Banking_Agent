@@ -1,9 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { addMessage, updateLastMessage } from "../../api/conversationSlice";
+import { addMessage, updateLastMessage, createNewChat } from "../../api/conversationSlice";
 import useChatManager from "../../hooks/useChatManager";
 import useVoiceChat from "../../hooks/useVoiceChat";
 import { useReferenceRequestMutation } from "../../api/apiSlice";
@@ -34,6 +35,7 @@ const MicIcon = ({ isRecording }) => (
 
 const ChatArea = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
   const [showRefs, setShowRefs] = useState({});
@@ -57,7 +59,7 @@ const ChatArea = () => {
       typeof overrideText === "string" ? overrideText : input
     ).trim();
 
-    if (!val || loading || !sessionId || !token) {
+    if (!val || loading || !sessionId) {
       if (!sessionId) toast.error("Waiting for session ID...");
       return;
     }
@@ -161,9 +163,69 @@ const ChatArea = () => {
     setShowRefs((prev) => ({ ...prev, [idx]: !prev[idx] }));
   };
 
+  const handleClearChat = () => {
+    dispatch(createNewChat());
+    toast.success("New conversation started");
+  };
+
+  const handleDownloadTranscript = () => {
+    if (!activeConv?.messages?.length) {
+      toast.warn("No messages to download");
+      return;
+    }
+    const title =
+      activeConv.messages.length > 0
+        ? activeConv.messages[0].content
+        : activeConv.title;
+    let text = `Chat Transcript: ${title}\n`;
+    text += `Date: ${new Date().toLocaleString()}\n`;
+    text += `${"=".repeat(50)}\n\n`;
+
+    for (const msg of activeConv.messages) {
+      const role = msg.role === "user" ? "You" : "Assistant";
+      text += `${role}:\n${msg.content || ""}\n\n`;
+    }
+
+    const blob = new Blob([text], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${title.substring(0, 40)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Transcript downloaded");
+  };
+
   return (
     <div className="chat-container">
-      <div className="messages-viewport custom-scrollbar">
+      {activeConv?.messages?.length > 0 && (
+        <div className="chat-toolbar">
+          <button className="icon-label-btn" onClick={handleClearChat}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="3 6 5 6 21 6" />
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+            </svg>
+            <span className="btn-hover-label">Clear Chat</span>
+          </button>
+          <button className="icon-label-btn" onClick={handleDownloadTranscript}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            <span className="btn-hover-label">Download Transcript</span>
+          </button>
+          <button className="icon-label-btn" onClick={() => navigate(-1)}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="23 18 17 12 23 6" />
+              <polyline points="1 6 7 12 1 18" />
+              <line x1="11" y1="12" x2="7" y2="12" />
+            </svg>
+            <span className="btn-hover-label">Back to Widget</span>
+          </button>
+        </div>
+      )}
+      <div className={`messages-viewport custom-scrollbar${!activeConv?.messages?.length ? " messages-empty" : ""}`}>
         {activeConv?.messages.map((msg, idx) => (
           <div
             key={idx}
@@ -366,6 +428,41 @@ const ChatArea = () => {
                   </svg>
                   <span className="btn-label">Bad</span>
                 </button>
+                <button
+                  onClick={handleClearChat}
+                  className="msg-action-btn"
+                  title="Clear Chat"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                  </svg>
+                  <span className="btn-label">Clear Chat</span>
+                </button>
+                <button
+                  onClick={handleDownloadTranscript}
+                  className="msg-action-btn"
+                  title="Download Transcript"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  <span className="btn-label">Download Transcript</span>
+                </button>
+                <button
+                  onClick={handleDownloadTranscript}
+                  className="msg-action-btn"
+                  title="Full Conversation"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    <line x1="8" y1="9" x2="16" y2="9" />
+                    <line x1="8" y1="13" x2="14" y2="13" />
+                  </svg>
+                  <span className="btn-label">Full Conversation</span>
+                </button>
               </div>
             )}
           </div>
@@ -373,7 +470,7 @@ const ChatArea = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="chat-input-section">
+      <div className="chat-input-section" style={!activeConv?.messages?.length ? { bottom: '80px' } : {}}>
         <div className="input-wrapper">
           <input
             type="text"

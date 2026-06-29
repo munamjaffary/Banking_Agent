@@ -21,6 +21,7 @@ const tableHead = [
   { id: "started_at", label: "Started At", type: "time" },
   { id: "completed_at", label: "Completed At", type: "time" },
   { id: "status", label: "Status" },
+  { id: "extraction_progress", label: "Extraction Progress", type: "progress" },
 ];
 
 const DocumentTable = () => {
@@ -40,7 +41,10 @@ const DocumentTable = () => {
     },
   });
 
-  const tableData = documenttable?.documents || [];
+  const tableData = (documenttable?.documents || []).map((doc) => ({
+    ...doc,
+    extraction_progress: doc.status === "Completed" ? 100 : doc.started_at && !doc.completed_at ? 66 : 0,
+  }));
   const totalRecords = documenttable?.total || 0;
   const totalPages = Math.ceil(totalRecords / limit);
 
@@ -99,6 +103,13 @@ const DocumentTable = () => {
           title={"Recent Document Uploads"}
           currentPage={"Document Uploads"}
         />
+        <button
+          className="back-to-activity-btn"
+          onClick={() => navigate("/portal/knowledgebase?tab=activity")}
+        >
+          <span className="back-icon">←</span>
+          <span className="back-label">Back to Activity</span>
+        </button>
       </div>
 
       <TableView

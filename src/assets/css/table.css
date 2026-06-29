@@ -1228,6 +1228,34 @@ body {
   color: #00b8d9;
 }
 
+.extraction-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.progress-track {
+  width: 60px;
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #009591;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.progress-label {
+  font-size: 12px;
+  color: var(--text-secondary, #666);
+  white-space: nowrap;
+}
+
 /* --- Table Actions --- */
 .table-actions {
   display: flex;

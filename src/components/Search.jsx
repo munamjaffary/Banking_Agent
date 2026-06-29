@@ -91,17 +91,28 @@
 
 // export default Search;
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { selectChat } from "../api/conversationSlice";
+import { createNewChat, selectChat, renameChat, deleteChat } from "../api/conversationSlice";
 import SearchIcon from "../assets/icons/search.svg";
 
 const Search = () => {
   const [query, setQuery] = useState("");
+  const [renameId, setRenameId] = useState(null);
+  const [renameValue, setRenameValue] = useState("");
+  const [menuOpenId, setMenuOpenId] = useState(null);
+  const renameRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { conversations } = useSelector((state) => state.conversation);
+
+  useEffect(() => {
+    if (renameId && renameRef.current) {
+      renameRef.current.focus();
+      renameRef.current.select();
+    }
+  }, [renameId]);
 
   const groupedChats = useMemo(() => {
     const filtered = conversations.filter((c) =>
@@ -126,23 +137,49 @@ const Search = () => {
 
   const handleAction = (id) => {
     dispatch(selectChat(id));
-    navigate("/chat");
+    navigate("/portal/chat");
+  };
+
+  const startRename = (chat) => {
+    setRenameValue(chat.messages.length > 0 ? chat.messages[0].content : chat.title);
+    setRenameId(chat.id);
+    setMenuOpenId(null);
+  };
+
+  const submitRename = () => {
+    if (renameValue.trim() && renameId) {
+      dispatch(renameChat({ id: renameId, title: renameValue.trim() }));
+    }
+    setRenameId(null);
+    setRenameValue("");
   };
 
   return (
     <div className="search-container height">
       <div className="search-header">
         <h1>Search Chat History</h1>
-        <div className="search-input-wrapper">
-          <button className="search-btn">
-            <img src={SearchIcon} alt="SearchIcon" />
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", width: "100%" }}>
+          <div className="search-input-wrapper" style={{ flex: 1 }}>
+            <button className="search-btn">
+              <img src={SearchIcon} alt="SearchIcon" />
+            </button>
+            <input
+              className="search-input-field"
+              placeholder="Search for chats..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+          <button
+            className="search-new-chat-btn"
+            onClick={() => {
+              dispatch(createNewChat());
+              navigate("/portal/chat");
+            }}
+          >
+            <span className="new-chat-icon">+</span>
+            <span className="new-chat-label">Start New Chat</span>
           </button>
-          <input
-            className="search-input-field"
-            placeholder="Search for chats..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
         </div>
       </div>
 
@@ -154,17 +191,68 @@ const Search = () => {
               <div
                 key={chat.id}
                 className="search-item"
-                onClick={() => handleAction(chat.id)}
+                onClick={() => {
+                  if (menuOpenId !== chat.id) handleAction(chat.id);
+                }}
+                style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
               >
-                <p className="chat-title truncate">
-                  {chat.messages?.[0]?.content || chat.title}
-                </p>
-                <p className="chat-date">
-                  {new Date(chat.createdAt || Date.now()).toLocaleDateString(
-                    "en-US",
-                    { month: "short", day: "numeric" },
+                {renameId === chat.id ? (
+                  <input
+                    ref={renameRef}
+                    className="chat-rename-input"
+                    value={renameValue}
+                    onChange={(e) => setRenameValue(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") submitRename();
+                      if (e.key === "Escape") setRenameId(null);
+                    }}
+                    onBlur={submitRename}
+                    onClick={(e) => e.stopPropagation()}
+                    style={{ flex: 1, marginRight: "8px" }}
+                  />
+                ) : (
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p className="chat-title truncate">
+                      {chat.messages?.[0]?.content || chat.title}
+                    </p>
+                    <p className="chat-date">
+                      {new Date(chat.createdAt || Date.now()).toLocaleDateString(
+                        "en-US", { month: "short", day: "numeric" },
+                      )}
+                    </p>
+                  </div>
+                )}
+                <div className="chat-menu-wrapper" onClick={(e) => e.stopPropagation()}>
+                  <button
+                    className="chat-menu-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMenuOpenId(menuOpenId === chat.id ? null : chat.id);
+                      setRenameId(null);
+                    }}
+                    title="More options"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <circle cx="12" cy="5" r="2" />
+                      <circle cx="12" cy="12" r="2" />
+                      <circle cx="12" cy="19" r="2" />
+                    </svg>
+                  </button>
+                  {menuOpenId === chat.id && (
+                    <div className="chat-dropdown-menu" style={{ right: 0, left: "auto" }}>
+                      <button onClick={(e) => { e.stopPropagation(); startRename(chat); }}>
+                        Rename
+                      </button>
+                      <button onClick={(e) => {
+                        e.stopPropagation();
+                        setMenuOpenId(null);
+                        dispatch(deleteChat(chat.id));
+                      }} className="danger">
+                        Delete
+                      </button>
+                    </div>
                   )}
-                </p>
+                </div>
               </div>
             ))}
           </div>

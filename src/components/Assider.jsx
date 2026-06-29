@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import GenAi from "../assets/icons/openai-icon.svg";
 import SideBar from "../assets/icons/sidebar-close.svg";
+import GridIcon from "../assets/icons/grid.svg";
 import SettingsIcon from "../assets/icons/settings.svg";
 import LogOutIcon from "../assets/icons/logout.svg";
 import DotsIcon from "../assets/icons/dots.svg";
 
 import { setLogout } from "../redux/authSlice";
 import {
+  createNewChat,
   selectChat,
   renameChat,
   deleteChat,
@@ -185,6 +187,17 @@ function Assider({ collapsed, setCollapsed }) {
           <div className="sidebar-scroll-area">
             {!collapsed && (
               <>
+                <button
+                  className="nav-tabs-button"
+                  onClick={() => {
+                    dispatch(createNewChat());
+                    setActiveTab("chat");
+                    navigate("/portal/chat");
+                  }}
+                  style={{ marginBottom: "8px", fontWeight: 600 }}
+                >
+                  <span className="tab-label">+ New Conversation</span>
+                </button>
                 <div className="section-title">Chat History</div>
                 {conversations.map((chat) => (
                   <div
@@ -278,6 +291,9 @@ function Assider({ collapsed, setCollapsed }) {
                 <div className="user-meta">
                   <span className="dropdown-name">
                     {user?.username || "Junaid"}
+                  </span>
+                  <span style={{ fontSize: "11px", color: "#9C6B3F", fontWeight: "500" }}>
+                    {user?.role || user?.user_type || ""}
                   </span>
                   <span className="dropdown-email">
                     {user?.email || "@muhammadjunaid.irfan"}

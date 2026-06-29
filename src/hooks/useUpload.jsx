@@ -20,7 +20,7 @@ export const useUpload = () => {
         const { data } = await triggerProgress({ 
           endpoint, 
           params: { file_name: fileName } 
-        }, true);
+        });
 
         if (data && typeof data.progress !== "undefined") {
           setUploadStates(prev => ({
