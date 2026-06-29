@@ -1,4 +1,4 @@
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { ToastContainer } from "react-toastify";
@@ -14,12 +14,12 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={null}>
-        <ThemeWrapper>
-          <BrowserRouter>
+        <HashRouter>
+          <ThemeWrapper>
             <MainRouter />
             <ToastContainer />
-          </BrowserRouter>
-        </ThemeWrapper>
+          </ThemeWrapper>
+        </HashRouter>
       </PersistGate>
     </Provider>
   );

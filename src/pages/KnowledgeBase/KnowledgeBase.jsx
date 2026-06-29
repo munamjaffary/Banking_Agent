@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Dashboard from "../Dashboard/Dashboard";
+import DashboardAnalytics from "./DashboardAnalytics";
 import Activity from "../Activity/Activity";
 
 const KB_TABS = [
@@ -29,7 +29,7 @@ function KnowledgeBase() {
         ))}
       </div>
 
-      {activeTab === "dashboard" && <Dashboard />}
+      {activeTab === "dashboard" && <DashboardAnalytics />}
       {activeTab === "activity" && <Activity />}
     </main>
   );

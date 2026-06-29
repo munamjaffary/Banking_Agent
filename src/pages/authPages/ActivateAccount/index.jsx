@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useGenericMutation, useLazyGetQuery } from "../../../api/apiSlice";
 import { endpoints } from "../../../api/config";
 import { toast } from "react-toastify";
-import KnowledgeLogo from "../../../assets/icons/knowledgebase-logo.svg";
-import LoginArrow from "../../../assets/icons/login-btn.svg";
 import InputField from "../../../components/InputField";
 import { getErrorMessage } from "../../../utils/HelperFunction";
 
@@ -72,16 +70,14 @@ const ActivateAccount = () => {
   return (
     <div className="login-container">
       <div className="login-info-container">
-        <img src={KnowledgeLogo} className="login-logo" alt="logo" />
         <div className="login-heading">
           {status === "success" ? (
             <>
-              <p>Account</p> <span>Activated!</span>{" "}
+              <p>Account</p> <span>Activated!</span>
             </>
           ) : (
             <>
-              {" "}
-              <p>Verify</p> <span>Your Account</span>{" "}
+              <p>NPFCU</p> <span>Verify Account</span>
             </>
           )}
         </div>

@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import NPFCUChatWidget from "./NPFCUChatWidget";
 
 function ThemeWrapper({ children }) {
   const theme = useSelector((state) => state.theme.theme);
@@ -8,7 +9,12 @@ function ThemeWrapper({ children }) {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <NPFCUChatWidget />
+    </>
+  );
 }
 
 export default ThemeWrapper;

@@ -1,6 +1,5 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import KnowledgeLogo from "../../../assets/icons/knowledgebase-logo.svg";
 import LoginArrow from "../../../assets/icons/login-btn.svg";
 import { useGenericMutation } from "../../../api/apiSlice";
 import { endpoints } from "../../../api/config";
@@ -34,10 +33,9 @@ const CheckEmail = () => {
   return (
     <div className="login-container">
       <div className="login-info-container">
-        <img src={KnowledgeLogo} className="login-logo" alt="logo" />
         <div className="login-heading">
           <p>Check Your</p>
-          <span>Email Address.</span>
+          <span>Email Address</span>
         </div>
 
         <p className="login-desc">

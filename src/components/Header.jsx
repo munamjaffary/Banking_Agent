@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../api/toggleThemeSlice";
 import Light from "../assets/icons/light.svg";
 import Dark from "../assets/icons/dark.svg";
-import DownArrow from "../assets/icons/leftarrow.svg";
 
 function Header() {
   const dispatch = useDispatch();
@@ -12,13 +11,6 @@ function Header() {
 
   return (
     <header className="chatgpt-header">
-      <div className="header-left">
-        <h2 className="model-selector">
-          Knowledge Base
-          <img src={DownArrow} alt="arrow" className="small-arrow" />
-        </h2>
-      </div>
-
       <div className="header-right">
         <div className="header-togglebtn">
           <button

@@ -15,7 +15,7 @@ const AuthRouting = () => {
 
   const currentPath = location.pathname;
   const getBackground = (path) => {
-    if (path === "/") return LoginBackground;
+    if (path === "/" || path === "/login") return LoginBackground;
     if (path.startsWith("/signup")) return SignupBackground;
     if (path.startsWith("/checkemail")) return ForgetBackground;
     if (path.startsWith("/activate")) return ActiveBackground;
@@ -28,6 +28,7 @@ const AuthRouting = () => {
         <div className=" auth-left-container">
           <Routes>
             <Route exact path="/" element={<Login />} />
+            <Route exact path="/login" element={<Login />} />
             <Route exact path="/signup" element={<Signup />} />
             <Route exact path="/checkemail" element={<CheckEmail />} />
             <Route path="/activate" element={<ActivateAccount />} />
