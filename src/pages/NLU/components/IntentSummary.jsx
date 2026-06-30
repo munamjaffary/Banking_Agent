@@ -333,10 +333,11 @@ function IntentSummary({ stats }) {
             <div className="nlu-top-users-list">
               {stats.topUsers.map(([email, count], idx) => {
                 const pct = Math.round((count / stats.totalConversations) * 100);
+                const name = email === "anonymous@guest" ? "Anonymous" : email.split("@")[0].replace(/[._]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
                 return (
                   <div key={email} className="nlu-top-user-row">
                     <span className="nlu-top-user-rank">{idx + 1}</span>
-                    <span className="nlu-top-user-email">{email}</span>
+                    <span className="nlu-top-user-email">{name}</span>
                     <span className="nlu-top-user-count">{pct}%</span>
                   </div>
                 );
