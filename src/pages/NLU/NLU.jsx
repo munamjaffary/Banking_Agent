@@ -284,16 +284,12 @@ function NLU() {
                         </div>
                         <div>
                           <span className="nlu-user-group-email">
-                            {email}
+                            {userSessions[0].role}
                           </span>
                           <span
-                            className="nlu-role-badge"
-                            style={{
-                              backgroundColor:
-                                colors[userSessions[0].role] || "#6b7280",
-                            }}
+                            className="nlu-user-group-sub"
                           >
-                            {userSessions[0].role}
+                            {email}
                           </span>
                         </div>
                       </div>

@@ -6,6 +6,7 @@ export const userRoles = {
   "alice.johnson@example.com": "Analyst",
   "charlie.brown@example.com": "Agent",
   "diana.prince@example.com": "Manager",
+  "anonymous@guest": "Anonymous",
 };
 
 export const rawEntries = [
@@ -481,6 +482,212 @@ export const rawEntries = [
     intents: [
       { name: "rates", confidence: 0.94 },
       { name: "account", confidence: 0.76 },
+    ],
+    handoff: false,
+  },
+  {
+    _id: "6a3f0e82fc49ca5383beb077",
+    session_id: "anonymous_session_001",
+    user_email: "anonymous@guest",
+    role: userRoles["anonymous@guest"],
+    query: "What are your current mortgage rates?",
+    response:
+      "Our current 30-year fixed mortgage rate starts at 5.75% APR. 15-year fixed is available from 4.99% APR. Would you like a personalized quote?",
+    references: [
+      { title: "Mortgage Rates", url: "#" },
+      { title: "Apply Online", url: "#" },
+    ],
+    timestamp: "2026-06-29T08:00:00.000+00:00",
+    intents: [
+      { name: "rates", confidence: 0.96 },
+      { name: "loans", confidence: 0.82 },
+    ],
+    handoff: false,
+  },
+  {
+    _id: "6a3f0f82fc49ca5383beb078",
+    session_id: "anonymous_session_001",
+    user_email: "anonymous@guest",
+    role: userRoles["anonymous@guest"],
+    query: "What documents do I need for a mortgage application?",
+    response:
+      "For a mortgage application you'll need: W-2 forms from the last 2 years, tax returns, bank statements (last 2 months), pay stubs (last 30 days), and a valid government ID.",
+    references: [{ title: "Mortgage Requirements", url: "#" }],
+    timestamp: "2026-06-29T08:02:00.000+00:00",
+    intents: [
+      { name: "loans", confidence: 0.95 },
+      { name: "account", confidence: 0.68 },
+    ],
+    handoff: false,
+  },
+  {
+    _id: "6a3f1082fc49ca5383beb079",
+    session_id: "anonymous_session_001",
+    user_email: "anonymous@guest",
+    role: userRoles["anonymous@guest"],
+    query: "What is the minimum down payment for a first-time home buyer?",
+    response:
+      "First-time home buyers may qualify for as little as 3% down with conventional loans. FHA loans require 3.5% down. NPFCU offers special programs for first-time buyers with reduced closing costs.",
+    references: [
+      { title: "First-Time Buyer Programs", url: "#" },
+      { title: "Down Payment Assistance", url: "#" },
+    ],
+    timestamp: "2026-06-29T08:05:00.000+00:00",
+    intents: [
+      { name: "loans", confidence: 0.97 },
+      { name: "general", confidence: 0.71 },
+    ],
+    handoff: false,
+  },
+  {
+    _id: "6a3f1182fc49ca5383beb080",
+    session_id: "anonymous_session_002",
+    user_email: "anonymous@guest",
+    role: userRoles["anonymous@guest"],
+    query: "How do I reset my online banking password?",
+    response:
+      "You can reset your password by clicking 'Forgot Password' on the login page. You'll receive a verification code via email or SMS to complete the reset.",
+    references: [{ title: "Password Reset Guide", url: "#" }],
+    timestamp: "2026-06-29T14:30:00.000+00:00",
+    intents: [
+      { name: "account", confidence: 0.98 },
+      { name: "general", confidence: 0.75 },
+    ],
+    handoff: false,
+  },
+  {
+    _id: "6a3f1282fc49ca5383beb081",
+    session_id: "anonymous_session_002",
+    user_email: "anonymous@guest",
+    role: userRoles["anonymous@guest"],
+    query: "Is there a mobile app for NPFCU?",
+    response:
+      "Yes, NPFCU offers a mobile app available on iOS and Android. You can deposit checks, transfer funds, pay bills, and locate branches from the app.",
+    references: [{ title: "Mobile App Download", url: "#" }],
+    timestamp: "2026-06-29T14:32:00.000+00:00",
+    intents: [
+      { name: "account", confidence: 0.91 },
+      { name: "general", confidence: 0.84 },
+    ],
+    handoff: false,
+  },
+  {
+    _id: "6a3f1382fc49ca5383beb082",
+    session_id: "anonymous_session_002",
+    user_email: "anonymous@guest",
+    role: userRoles["anonymous@guest"],
+    query: "Does the mobile app support biometric login?",
+    response:
+      "Yes, our mobile app supports both fingerprint and facial recognition login on compatible devices for secure and convenient access.",
+    references: [{ title: "Mobile App Features", url: "#" }],
+    timestamp: "2026-06-29T14:35:00.000+00:00",
+    intents: [{ name: "account", confidence: 0.93 }],
+    handoff: false,
+  },
+  {
+    _id: "6a3f1482fc49ca5383beb083",
+    session_id: "anonymous_session_003",
+    user_email: "anonymous@guest",
+    role: userRoles["anonymous@guest"],
+    query: "What are the benefits of a credit union vs a bank?",
+    response:
+      "Credit unions are member-owned nonprofits, which typically means lower loan rates, higher savings rates, fewer fees, and personalized service. NPFCU returns profits to members through dividends.",
+    references: [
+      { title: "Why Choose a Credit Union", url: "#" },
+      { title: "NPFCU Membership Benefits", url: "#" },
+    ],
+    timestamp: "2026-06-30T09:00:00.000+00:00",
+    intents: [
+      { name: "membership", confidence: 0.96 },
+      { name: "general", confidence: 0.88 },
+    ],
+    handoff: false,
+  },
+  {
+    _id: "6a3f1582fc49ca5383beb084",
+    session_id: "anonymous_session_003",
+    user_email: "anonymous@guest",
+    role: userRoles["anonymous@guest"],
+    query: "Can I open an account online?",
+    response:
+      "Yes, you can open an NPFCU account entirely online in about 10 minutes. You'll need your ID, Social Security number, and a minimum $5 deposit to get started.",
+    references: [{ title: "Open an Account Online", url: "#" }],
+    timestamp: "2026-06-30T09:03:00.000+00:00",
+    intents: [
+      { name: "membership", confidence: 0.97 },
+      { name: "account", confidence: 0.85 },
+    ],
+    handoff: false,
+  },
+  {
+    _id: "6a3f1682fc49ca5383beb085",
+    session_id: "anonymous_session_003",
+    user_email: "anonymous@guest",
+    role: userRoles["anonymous@guest"],
+    query: "What is the minimum age requirement for membership?",
+    response:
+      "You must be at least 18 years old to open a membership account. For minors under 18, a parent or guardian can open a joint account or a custodial account.",
+    references: [{ title: "Membership Eligibility", url: "#" }],
+    timestamp: "2026-06-30T09:06:00.000+00:00",
+    intents: [
+      { name: "membership", confidence: 0.94 },
+      { name: "general", confidence: 0.72 },
+    ],
+    handoff: true,
+    handoffReason: "Customer asked about minor account options requiring specialist",
+  },
+  {
+    _id: "6a3f1782fc49ca5383beb086",
+    session_id: "anonymous_session_004",
+    user_email: "anonymous@guest",
+    role: userRoles["anonymous@guest"],
+    query: "What should I do if I see unauthorized transactions?",
+    response:
+      "If you see unauthorized transactions, contact us immediately at 1-800-NPFCU-NOW. Your liability is limited if reported within 60 days. We'll issue provisional credit within 10 business days.",
+    references: [
+      { title: "Fraud Reporting", url: "#" },
+      { title: "Dispute Process", url: "#" },
+    ],
+    timestamp: "2026-06-30T11:15:00.000+00:00",
+    intents: [
+      { name: "fraud", confidence: 0.99 },
+      { name: "account", confidence: 0.90 },
+    ],
+    handoff: true,
+    handoffReason: "Potential fraud case required immediate escalation",
+  },
+  {
+    _id: "6a3f1882fc49ca5383beb087",
+    session_id: "anonymous_session_004",
+    user_email: "anonymous@guest",
+    role: userRoles["anonymous@guest"],
+    query: "How does NPFCU protect my personal information?",
+    response:
+      "NPFCU uses 256-bit encryption, multi-factor authentication, 24/7 fraud monitoring, and guaranteed zero-liability on unauthorized transactions to protect your information.",
+    references: [
+      { title: "Security Center", url: "#" },
+      { title: "Privacy Policy", url: "#" },
+    ],
+    timestamp: "2026-06-30T11:18:00.000+00:00",
+    intents: [
+      { name: "fraud", confidence: 0.92 },
+      { name: "account", confidence: 0.83 },
+    ],
+    handoff: false,
+  },
+  {
+    _id: "6a3f1982fc49ca5383beb088",
+    session_id: "anonymous_session_004",
+    user_email: "anonymous@guest",
+    role: userRoles["anonymous@guest"],
+    query: "Do you offer identity theft protection services?",
+    response:
+      "Yes, NPFCU offers identity theft protection including credit monitoring, identity restoration support, and up to $25,000 in identity theft insurance with our premium accounts.",
+    references: [{ title: "Identity Theft Protection", url: "#" }],
+    timestamp: "2026-06-30T11:22:00.000+00:00",
+    intents: [
+      { name: "fraud", confidence: 0.95 },
+      { name: "account", confidence: 0.78 },
     ],
     handoff: false,
   },

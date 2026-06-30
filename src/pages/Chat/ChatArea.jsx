@@ -38,7 +38,9 @@ const ChatArea = () => {
   const navigate = useNavigate();
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
+  const thinkingTimerRef = useRef(null);
   const [showRefs, setShowRefs] = useState({});
+  const [thinkingPhase, setThinkingPhase] = useState("idle");
   const token = useSelector((state) => state.auth.token);
   const { conversations, activeConvId } = useSelector(
     (state) => state.conversation,
@@ -53,6 +55,27 @@ const ChatArea = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [activeConv?.messages, loading]);
+
+  useEffect(() => {
+    if (loading) {
+      setThinkingPhase("thinking");
+      thinkingTimerRef.current = setTimeout(() => {
+        setThinkingPhase("fetching");
+      }, 5000);
+    } else {
+      setThinkingPhase("idle");
+      if (thinkingTimerRef.current) {
+        clearTimeout(thinkingTimerRef.current);
+        thinkingTimerRef.current = null;
+      }
+    }
+    return () => {
+      if (thinkingTimerRef.current) {
+        clearTimeout(thinkingTimerRef.current);
+        thinkingTimerRef.current = null;
+      }
+    };
+  }, [loading]);
 
   const handleSend = async (overrideText) => {
     const val = (
@@ -238,12 +261,9 @@ const ChatArea = () => {
               !msg.content &&
               loading &&
               idx === activeConv.messages.length - 1 ? (
-                <div className="typing-wave">
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                </div>
+                <span className="thinking-text">
+                  {thinkingPhase === "fetching" ? "Fetching context..." : "Thinking..."}
+                </span>
               ) : (
                 <div
                   className={`message-content ${

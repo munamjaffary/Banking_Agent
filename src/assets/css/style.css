@@ -1962,49 +1962,19 @@ DELETE MODAL
 /* =========================
 LOADING   
 ========================= */
-.typing-wave {
-  display: flex;
+.thinking-text {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #9C6B3F;
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
-.typing-wave span {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  animation: wave 1.3s ease-in-out infinite;
-}
-
-.typing-wave span:nth-child(1) {
-  background: #ff6b81;
-  animation-delay: 0s;
-}
-
-.typing-wave span:nth-child(2) {
-  background: #ff8c42;
-  animation-delay: 0.15s;
-}
-
-.typing-wave span:nth-child(3) {
-  background: #ffc048;
-  animation-delay: 0.3s;
-}
-
-.typing-wave span:nth-child(4) {
-  background: #7bed9f;
-  animation-delay: 0.45s;
-}
-
-@keyframes wave {
-  0%,
-  100% {
-    transform: translateY(0);
-    opacity: 0.4;
-  }
-  50% {
-    transform: translateY(-6px);
-    opacity: 1;
-  }
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
 }
 
 /* ===============================
@@ -2128,7 +2098,7 @@ LOADING
 }
 
 .assistant-bubble {
-  background-color: var(--assider);
+  background-color: var(--card);
   color: var(--text);
   border: 1px solid var(--border-color);
   border-bottom-left-radius: 4px;
@@ -3691,12 +3661,13 @@ LOADING
   font-size: var(--font-size-16px);
   color: var(--text);
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
-.nlu-user-group-email + .nlu-role-badge {
-  font-size: 11px;
-  padding: 2px 8px;
+.nlu-user-group-sub {
+  font-size: 12px;
+  color: #8e8e8e;
+  display: block;
 }
 
 .nlu-user-group-count {
