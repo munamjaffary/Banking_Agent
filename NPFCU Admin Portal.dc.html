@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:#F4F1EA; }
+  .admin{ font-family:'Public Sans',system-ui,sans-serif; color:#1B1A16; display:flex; min-height:100vh; }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; }
+  a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{ outline:3px solid #C8A24C; outline-offset:2px; border-radius:4px; }
+  input,select,textarea{ font-family:inherit; }
+  ::placeholder{ color:#B5B0A4; }
+  [data-sec="dashboard"] [data-nav="dashboard"],[data-sec="rates"] [data-nav="rates"],[data-sec="review"] [data-nav="approvals"],[data-sec="approvals"] [data-nav="approvals"],[data-sec="documents"] [data-nav="documents"],[data-sec="audit"] [data-nav="audit"],[data-sec="config"] [data-nav="config"]{ background:rgba(200,162,76,.16) !important; color:#F5F1E8 !important; }
+  [data-sec="dashboard"] [data-nav="dashboard"] .navdot,[data-sec="rates"] [data-nav="rates"] .navdot,[data-sec="review"] [data-nav="approvals"] .navdot,[data-sec="approvals"] [data-nav="approvals"] .navdot,[data-sec="documents"] [data-nav="documents"] .navdot,[data-sec="audit"] [data-nav="audit"] .navdot,[data-sec="config"] [data-nav="config"] .navdot{ opacity:1 !important; }
+  .navitem{ transition:background .14s ease; }
+  .navitem:hover{ background:rgba(255,255,255,.06); }
+  .row-h{ transition:background .12s ease; }
+  .row-h:hover{ background:#FAF6EC; }
+  .btn-pri{ transition:background .15s ease, transform .1s ease; }
+  .btn-pri:hover{ background:#0A2C28; }
+  .btn-pri:active{ transform:translateY(1px); }
+  .lift{ transition:transform .16s ease, box-shadow .16s ease; }
+  .lift:hover{ transform:translateY(-2px); box-shadow:0 8px 22px rgba(14,59,54,.12); }
+  @keyframes slideUp{ from{ opacity:0; transform:translate(-50%,12px);} to{ opacity:1; transform:translate(-50%,0);} }
+  @keyframes fade{ from{ opacity:0;} to{ opacity:1;} }
+  .toast{ animation:slideUp .25s ease both; }
+</style>
+</helmet>
+
+<div class="admin" data-sec="{{ section }}">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside style="width:248px; flex-shrink:0; background:#0A2C28; display:flex; flex-direction:column; position:sticky; top:0; height:100vh;">
+    <div style="padding:22px 20px; border-bottom:1px solid rgba(255,255,255,.08); display:flex; align-items:center; gap:11px;">
+      <div style="width:34px; height:34px; background:#C8A24C; border-radius:8px; display:flex; align-items:center; justify-content:center;"><div style="width:13px; height:13px; background:#0A2C28; transform:rotate(45deg); border-radius:2px;"></div></div>
+      <div style="line-height:1.1;"><div style="font-size:14px; font-weight:700; color:#F5F1E8;">NPFCU</div><div style="font-size:10px; color:#6E9C92; font-weight:600; letter-spacing:.06em;">Change Request Portal</div></div>
+    </div>
+    <nav style="flex:1; padding:14px 12px; display:flex; flex-direction:column; gap:3px;">
+      <div style="font-size:10px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:rgba(245,241,232,.35); padding:10px 12px 6px;">Workspace</div>
+      <button data-nav="dashboard" onClick="{{ goDashboard }}" class="navitem" style="display:flex; align-items:center; gap:11px; background:transparent; border:none; color:rgba(245,241,232,.78); font-size:13.5px; font-weight:500; padding:10px 12px; border-radius:8px; cursor:pointer; text-align:left;"><span class="navdot" style="width:4px; height:16px; border-radius:3px; background:#C8A24C; opacity:0;"></span><span style="width:18px; text-align:center;">▦</span>Dashboard</button>
+      <button data-nav="rates" onClick="{{ goRates }}" class="navitem" style="display:flex; align-items:center; gap:11px; background:transparent; border:none; color:rgba(245,241,232,.78); font-size:13.5px; font-weight:500; padding:10px 12px; border-radius:8px; cursor:pointer; text-align:left;"><span class="navdot" style="width:4px; height:16px; border-radius:3px; background:#C8A24C; opacity:0;"></span><span style="width:18px; text-align:center;">%</span>Rate Changes</button>
+      <button data-nav="approvals" onClick="{{ goApprovals }}" class="navitem" style="display:flex; align-items:center; gap:11px; background:transparent; border:none; color:rgba(245,241,232,.78); font-size:13.5px; font-weight:500; padding:10px 12px; border-radius:8px; cursor:pointer; text-align:left; position:relative;"><span class="navdot" style="width:4px; height:16px; border-radius:3px; background:#C8A24C; opacity:0;"></span><span style="width:18px; text-align:center;">✓</span>Approvals<span style="margin-left:auto; font-size:10px; font-weight:700; color:#0A2C28; background:#C8A24C; padding:1px 7px; border-radius:20px;">5</span></button>
+      <button data-nav="documents" onClick="{{ goDocuments }}" class="navitem" style="display:flex; align-items:center; gap:11px; background:transparent; border:none; color:rgba(245,241,232,.78); font-size:13.5px; font-weight:500; padding:10px 12px; border-radius:8px; cursor:pointer; text-align:left;"><span class="navdot" style="width:4px; height:16px; border-radius:3px; background:#C8A24C; opacity:0;"></span><span style="width:18px; text-align:center;">▤</span>Documents</button>
+      <div style="font-size:10px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:rgba(245,241,232,.35); padding:16px 12px 6px;">Oversight</div>
+      <button data-nav="audit" onClick="{{ goAudit }}" class="navitem" style="display:flex; align-items:center; gap:11px; background:transparent; border:none; color:rgba(245,241,232,.78); font-size:13.5px; font-weight:500; padding:10px 12px; border-radius:8px; cursor:pointer; text-align:left;"><span class="navdot" style="width:4px; height:16px; border-radius:3px; background:#C8A24C; opacity:0;"></span><span style="width:18px; text-align:center;">⊟</span>Audit Log</button>
+      <button data-nav="config" onClick="{{ goConfig }}" class="navitem" style="display:flex; align-items:center; gap:11px; background:transparent; border:none; color:rgba(245,241,232,.78); font-size:13.5px; font-weight:500; padding:10px 12px; border-radius:8px; cursor:pointer; text-align:left;"><span class="navdot" style="width:4px; height:16px; border-radius:3px; background:#C8A24C; opacity:0;"></span><span style="width:18px; text-align:center;">⚙</span>Approval Rules</button>
+    </nav>
+    <div style="padding:14px 16px; border-top:1px solid rgba(255,255,255,.08); display:flex; align-items:center; gap:11px;">
+      <div style="width:36px; height:36px; border-radius:50%; background:#6E9C92; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#0A2C28;">JK</div>
+      <div style="line-height:1.2;"><div style="font-size:13px; font-weight:600; color:#F5F1E8;">Jameel Khan</div><div style="font-size:11px; color:#6E9C92;">Senior Manager</div></div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div style="flex:1; min-width:0; display:flex; flex-direction:column;">
+    <!-- topbar -->
+    <header style="height:64px; background:#FBF9F4; border-bottom:1px solid #ECE6D8; display:flex; align-items:center; justify-content:space-between; padding:0 28px; position:sticky; top:0; z-index:30;">
+      <div>
+        <div style="font-size:16px; font-weight:700; color:#1B1A16;">{{ pageTitle }}</div>
+        <div style="font-size:11.5px; color:#9A958A;">{{ pageSub }}</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div style="display:flex; align-items:center; gap:8px; background:#F1ECE0; border-radius:9px; padding:9px 14px; width:240px;"><span style="color:#B5B0A4; font-size:13px;">⌕</span><span style="font-size:13px; color:#B5B0A4;">Search requests…</span></div>
+        <button style="position:relative; width:38px; height:38px; border-radius:9px; border:1px solid #ECE6D8; background:#fff; cursor:pointer; font-size:15px; color:#6B6862;">◔<span style="position:absolute; top:7px; right:8px; width:7px; height:7px; border-radius:50%; background:#C8A24C;"></span></button>
+        <button onClick="{{ goRates }}" class="btn-pri" style="font-size:13px; font-weight:600; color:#F5F1E8; background:#0E3B36; border:none; padding:11px 18px; border-radius:9px; cursor:pointer;">+ New request</button>
+      </div>
+    </header>
+
+    <main style="flex:1; padding:28px; overflow-y:auto;">
+
+    <!-- ===== DASHBOARD ===== -->
+    <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+    <div class="view">
+      <!-- stat cards -->
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+        <div style="background:#fff; border:1px solid #ECE6D8; border-radius:14px; padding:20px;"><div style="font-size:12px; color:#9A958A; font-weight:500;">Pending approvals</div><div style="display:flex; align-items:baseline; gap:8px; margin-top:8px;"><span style="font-family:'Newsreader',serif; font-size:36px; font-weight:500; color:#0E3B36;">5</span><span style="font-size:12px; font-weight:600; color:#9C6B3F;">+2 today</span></div></div>
+        <div style="background:#fff; border:1px solid #ECE6D8; border-radius:14px; padding:20px;"><div style="font-size:12px; color:#9A958A; font-weight:500;">Published this month</div><div style="display:flex; align-items:baseline; gap:8px; margin-top:8px;"><span style="font-family:'Newsreader',serif; font-size:36px; font-weight:500; color:#0E3B36;">12</span><span style="font-size:12px; color:#9A958A;">3 rates · 9 content</span></div></div>
+        <div style="background:#fff; border:1px solid #ECE6D8; border-radius:14px; padding:20px;"><div style="font-size:12px; color:#9A958A; font-weight:500;">Chatbot sessions</div><div style="display:flex; align-items:baseline; gap:8px; margin-top:8px;"><span style="font-family:'Newsreader',serif; font-size:36px; font-weight:500; color:#0E3B36;">1,847</span><span style="font-size:12px; font-weight:600; color:#6E9C92;">▲ 18%</span></div></div>
+        <div style="background:#fff; border:1px solid #ECE6D8; border-radius:14px; padding:20px;"><div style="font-size:12px; color:#9A958A; font-weight:500;">Avg approval time</div><div style="display:flex; align-items:baseline; gap:8px; margin-top:8px;"><span style="font-family:'Newsreader',serif; font-size:36px; font-weight:500; color:#0E3B36;">4.2h</span><span style="font-size:12px; color:#9A958A;">target &lt; 8h</span></div></div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1.6fr 1fr; gap:18px; margin-top:18px;">
+        <!-- pending approvals table -->
+        <div style="background:#fff; border:1px solid #ECE6D8; border-radius:14px; overflow:hidden;">
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid #F1ECE0;"><div style="font-size:14px; font-weight:700;">Pending approvals</div><span style="font-size:11px; font-weight:600; color:#9C6B3F; background:#F6ECDA; padding:4px 10px; border-radius:20px;">Action required</span></div>
+          <div style="display:grid; grid-template-columns:2.4fr 1fr 1fr .8fr; padding:11px 20px; background:#FBF9F4; font-size:10.5px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:#9A958A;"><div>Change request</div><div>Submitted by</div><div>Type</div><div></div></div>
+          <sc-for list="{{ pending }}" as="p" hint-placeholder-count="5">
+            <button onClick="{{ p.open }}" class="row-h" style="width:100%; text-align:left; display:grid; grid-template-columns:2.4fr 1fr 1fr .8fr; align-items:center; padding:14px 20px; border-top:1px solid #F1ECE0; background:transparent; border-left:none; border-right:none; border-bottom:none; cursor:pointer;">
+              <div><div style="font-size:13.5px; font-weight:600; color:#1B1A16;">{{ p.title }}</div><div style="font-size:11px; color:#9A958A;">{{ p.date }}</div></div>
+              <div style="font-size:13px; color:#5C5A52;">{{ p.by }}</div>
+              <div><span style="font-size:11px; font-weight:600; color:{{ p.tagColor }}; background:{{ p.tagBg }}; padding:3px 9px; border-radius:20px;">{{ p.type }}</span></div>
+              <div style="text-align:right; font-size:13px; font-weight:600; color:#0E3B36;">Review →</div>
+            </button>
+          </sc-for>
+        </div>
+        <!-- recent activity -->
+        <div style="background:#fff; border:1px solid #ECE6D8; border-radius:14px; padding:20px;">
+          <div style="font-size:14px; font-weight:700; margin-bottom:16px;">Recent activity</div>
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <sc-for list="{{ activity }}" as="a" hint-placeholder-count="4">
+              <div style="display:flex; gap:12px; padding:11px 0; border-bottom:1px solid #F4F1EA;">
+                <div style="width:8px; height:8px; border-radius:50%; background:{{ a.dot }}; margin-top:5px; flex-shrink:0;"></div>
+                <div><div style="font-size:13px; color:#1B1A16; line-height:1.4;">{{ a.text }}</div><div style="font-size:11px; color:#9A958A; margin-top:2px;">{{ a.when }}</div></div>
+              </div>
+            </sc-for>
+          </div>
+          <button onClick="{{ goAudit }}" style="width:100%; margin-top:14px; font-size:12.5px; font-weight:600; color:#0E3B36; background:#F1ECE0; border:none; padding:11px; border-radius:9px; cursor:pointer;">View full audit log →</button>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ===== NEW RATE CHANGE ===== -->
+    <sc-if value="{{ isRates }}" hint-placeholder-val="{{ false }}">
+    <div class="view" style="display:grid; grid-template-columns:1.5fr 1fr; gap:20px; align-items:start;">
+      <!-- form -->
+      <div style="background:#fff; border:1px solid #ECE6D8; border-radius:16px; padding:28px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;"><h2 style="font-family:'Newsreader',serif; font-size:24px; font-weight:500; color:#0E3B36; margin:0;">New rate change request</h2></div>
+        <p style="font-size:13px; color:#9A958A; margin:0 0 22px;">Changes route through the dual-approval workflow before publishing.</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div><label style="font-size:12px; font-weight:600; color:#6B6862; display:block; margin-bottom:7px;">Product category</label>
+            <select value="{{ fcat }}" onChange="{{ onCat }}" style="width:100%; font-size:14px; padding:11px 13px; border:1px solid #E3DCCB; border-radius:9px; background:#FBF9F4;">
+              <option value="savings">Savings</option><option value="loans">Loans</option><option value="cds">Certificates</option><option value="mortgages">Mortgages</option>
+            </select>
+          </div>
+          <div><label style="font-size:12px; font-weight:600; color:#6B6862; display:block; margin-bottom:7px;">Product</label>
+            <select value="{{ fprodIdx }}" onChange="{{ onProd }}" style="width:100%; font-size:14px; padding:11px 13px; border:1px solid #E3DCCB; border-radius:9px; background:#FBF9F4;">
+              <sc-for list="{{ prodOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+            </select>
+          </div>
+          <div><label style="font-size:12px; font-weight:600; color:#6B6862; display:block; margin-bottom:7px;">Current {{ rateLabel }} (auto-filled)</label>
+            <div style="font-size:14px; padding:11px 13px; border:1px solid #ECE6D8; border-radius:9px; background:#F4F1EA; color:#6B6862; font-variant-numeric:tabular-nums;">{{ currentRateFmt }}</div>
+          </div>
+          <div><label style="font-size:12px; font-weight:600; color:#6B6862; display:block; margin-bottom:7px;">Proposed {{ rateLabel }}</label>
+            <input type="number" step="0.01" value="{{ fproposed }}" onInput="{{ onProposed }}" style="width:100%; font-size:14px; padding:11px 13px; border:1.5px solid #0E3B36; border-radius:9px; background:#fff; font-variant-numeric:tabular-nums;">
+          </div>
+          <div><label style="font-size:12px; font-weight:600; color:#6B6862; display:block; margin-bottom:7px;">Effective date</label>
+            <input type="date" value="{{ feffective }}" onInput="{{ onEffective }}" style="width:100%; font-size:14px; padding:11px 13px; border:1px solid #E3DCCB; border-radius:9px; background:#FBF9F4;">
+          </div>
+          <div><label style="font-size:12px; font-weight:600; color:#6B6862; display:block; margin-bottom:7px;">Minimum balance</label>
+            <input type="text" value="{{ fmin }}" onInput="{{ onMin }}" style="width:100%; font-size:14px; padding:11px 13px; border:1px solid #E3DCCB; border-radius:9px; background:#FBF9F4;">
+          </div>
+        </div>
+        <div style="margin-top:16px;"><label style="font-size:12px; font-weight:600; color:#6B6862; display:block; margin-bottom:7px;">Justification / notes</label>
+          <textarea rows="3" value="{{ fjustification }}" onInput="{{ onJust }}" style="width:100%; font-size:14px; padding:11px 13px; border:1px solid #E3DCCB; border-radius:9px; background:#FBF9F4; resize:vertical;"></textarea>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:22px;">
+          <button onClick="{{ submitRequest }}" class="btn-pri" style="font-size:14px; font-weight:600; color:#F5F1E8; background:#0E3B36; border:none; padding:13px 22px; border-radius:9px; cursor:pointer;">Submit for approval</button>
+          <button onClick="{{ saveDraft }}" style="font-size:14px; font-weight:600; color:#0E3B36; background:#F1ECE0; border:none; padding:13px 22px; border-radius:9px; cursor:pointer;">Save as draft</button>
+        </div>
+      </div>
+      <!-- preview + chain -->
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="background:#0E3B36; border-radius:16px; padding:24px;">
+          <div style="font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#6E9C92; margin-bottom:14px;">Change preview</div>
+          <div style="font-size:15px; font-weight:600; color:#F5F1E8;">{{ prodName }}</div>
+          <div style="display:flex; align-items:center; gap:12px; margin:14px 0;">
+            <span style="font-family:'Newsreader',serif; font-size:30px; color:rgba(245,241,232,.55); font-variant-numeric:tabular-nums;">{{ currentRateFmt }}</span>
+            <span style="color:#C8A24C; font-size:20px;">→</span>
+            <span style="font-family:'Newsreader',serif; font-size:30px; color:#C8A24C; font-variant-numeric:tabular-nums;">{{ proposedRateFmt }}</span>
+          </div>
+          <div style="display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:{{ deltaColor }}; background:rgba(255,255,255,.08); padding:5px 11px; border-radius:20px;">{{ deltaText }}</div>
+          <div style="font-size:12px; color:rgba(245,241,232,.6); line-height:1.5; margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,.12);">Appears on the member-facing Rates page and syncs to the chatbot after approval.</div>
+        </div>
+        <div style="background:#fff; border:1px solid #ECE6D8; border-radius:16px; padding:22px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;"><span style="font-size:13px; font-weight:700;">Approval chain</span><span style="font-size:10px; font-weight:600; color:#9C6B3F; background:#F6ECDA; padding:3px 9px; border-radius:20px;">Dual approval</span></div>
+          <div style="display:flex; flex-direction:column; gap:0;">
+            <div style="display:flex; gap:13px; align-items:flex-start;"><div style="display:flex; flex-direction:column; align-items:center;"><div style="width:26px; height:26px; border-radius:50%; background:#0E3B36; color:#C8A24C; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">1</div><div style="width:2px; height:26px; background:#E3DCCB;"></div></div><div style="padding-top:3px;"><div style="font-size:13px; font-weight:600;">You (Manager)</div><div style="font-size:11px; color:#9A958A;">Submit request</div></div></div>
+            <div style="display:flex; gap:13px; align-items:flex-start;"><div style="display:flex; flex-direction:column; align-items:center;"><div style="width:26px; height:26px; border-radius:50%; background:#F1ECE0; color:#9A958A; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">2</div><div style="width:2px; height:26px; background:#E3DCCB;"></div></div><div style="padding-top:3px;"><div style="font-size:13px; font-weight:600;">Senior Manager</div><div style="font-size:11px; color:#9A958A;">First approval</div></div></div>
+            <div style="display:flex; gap:13px; align-items:flex-start;"><div style="display:flex; flex-direction:column; align-items:center;"><div style="width:26px; height:26px; border-radius:50%; background:#F1ECE0; color:#9A958A; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">3</div><div style="width:2px; height:26px; background:#E3DCCB;"></div></div><div style="padding-top:3px;"><div style="font-size:13px; font-weight:600;">Compliance</div><div style="font-size:11px; color:#9A958A;">Final approval</div></div></div>
+            <div style="display:flex; gap:13px; align-items:flex-start;"><div style="width:26px; height:26px; border-radius:50%; background:#F1ECE0; color:#9A958A; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">4</div><div style="padding-top:3px;"><div style="font-size:13px; font-weight:600;">System</div><div style="font-size:11px; color:#9A958A;">Auto-publish &amp; sync</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ===== APPROVALS QUEUE ===== -->
+    <sc-if value="{{ isApprovals }}" hint-placeholder-val="{{ false }}">
+    <div class="view" style="background:#fff; border:1px solid #ECE6D8; border-radius:16px; overflow:hidden;">
+      <div style="padding:18px 22px; border-bottom:1px solid #F1ECE0;"><div style="font-size:15px; font-weight:700;">Approval queue</div><div style="font-size:12px; color:#9A958A;">5 items awaiting your review · oldest auto-escalates in 36h</div></div>
+      <div style="display:grid; grid-template-columns:2.4fr 1fr 1fr 1fr .8fr; padding:11px 22px; background:#FBF9F4; font-size:10.5px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:#9A958A;"><div>Change request</div><div>Submitted by</div><div>Type</div><div>Approval</div><div></div></div>
+      <sc-for list="{{ pending }}" as="p" hint-placeholder-count="5">
+        <button onClick="{{ p.open }}" class="row-h" style="width:100%; text-align:left; display:grid; grid-template-columns:2.4fr 1fr 1fr 1fr .8fr; align-items:center; padding:15px 22px; border-top:1px solid #F1ECE0; background:transparent; border-left:none; border-right:none; border-bottom:none; cursor:pointer;">
+          <div><div style="font-size:13.5px; font-weight:600; color:#1B1A16;">{{ p.title }}</div><div style="font-size:11px; color:#9A958A;">{{ p.date }}</div></div>
+          <div style="font-size:13px; color:#5C5A52;">{{ p.by }}</div>
+          <div><span style="font-size:11px; font-weight:600; color:{{ p.tagColor }}; background:{{ p.tagBg }}; padding:3px 9px; border-radius:20px;">{{ p.type }}</span></div>
+          <div style="font-size:12px; color:#5C5A52;">{{ p.approval }}</div>
+          <div style="text-align:right; font-size:13px; font-weight:600; color:#0E3B36;">Review →</div>
+        </button>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <!-- ===== REVIEW DETAIL ===== -->
+    <sc-if value="{{ isReview }}" hint-placeholder-val="{{ false }}">
+    <div class="view">
+      <button onClick="{{ goApprovals }}" style="font-size:12.5px; font-weight:600; color:#6B6862; background:transparent; border:none; cursor:pointer; padding:0; margin-bottom:14px;">← Back to queue</button>
+      <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:20px; align-items:start;">
+        <div style="background:#fff; border:1px solid #ECE6D8; border-radius:16px; padding:28px;">
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <div><div style="font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:#9C6B3F;">{{ reviewCategory }}</div><h2 style="font-family:'Newsreader',serif; font-size:24px; font-weight:500; color:#0E3B36; margin:6px 0 0;">{{ reviewProduct }}</h2></div>
+            <span style="font-size:11px; font-weight:600; color:#9C6B3F; background:#F6ECDA; padding:5px 11px; border-radius:20px;">Awaiting review</span>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:24px 0; padding:20px; background:#FBF9F4; border-radius:12px;">
+            <div><div style="font-size:11px; color:#9A958A;">Request ID</div><div style="font-size:14px; font-weight:600; color:#1B1A16;">{{ reviewId }}</div></div>
+            <div><div style="font-size:11px; color:#9A958A;">Submitted by</div><div style="font-size:14px; font-weight:600; color:#1B1A16;">{{ reviewBy }}</div></div>
+            <div><div style="font-size:11px; color:#9A958A;">Current rate</div><div style="font-size:14px; font-weight:600; color:#1B1A16; font-variant-numeric:tabular-nums;">{{ reviewCurrent }}</div></div>
+            <div><div style="font-size:11px; color:#9A958A;">Effective date</div><div style="font-size:14px; font-weight:600; color:#1B1A16;">{{ reviewEffective }}</div></div>
+          </div>
+          <div style="font-size:12px; font-weight:600; color:#6B6862; margin-bottom:6px;">Justification</div>
+          <p style="font-size:13.5px; color:#3F3D38; line-height:1.6; margin:0 0 22px; padding:14px 16px; background:#FBF9F4; border-radius:10px; border-left:3px solid #C8A24C;">{{ reviewJustification }}</p>
+
+          <sc-if value="{{ decisionPending }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <div style="font-size:13px; font-weight:700; margin-bottom:10px;">Your decision</div>
+            <textarea rows="2" value="{{ reviewComment }}" onInput="{{ onReviewComment }}" placeholder="Add a comment (required if rejecting)…" style="width:100%; font-size:13.5px; padding:11px 13px; border:1px solid #E3DCCB; border-radius:9px; background:#FBF9F4; resize:vertical; margin-bottom:14px;"></textarea>
+            <div style="display:flex; gap:10px;">
+              <button onClick="{{ approve }}" class="btn-pri" style="font-size:14px; font-weight:600; color:#F5F1E8; background:#0E3B36; border:none; padding:13px 22px; border-radius:9px; cursor:pointer;">✓ Approve</button>
+              <button onClick="{{ reject }}" style="font-size:14px; font-weight:600; color:#9C3F3F; background:#F7E9E5; border:none; padding:13px 22px; border-radius:9px; cursor:pointer;">Reject</button>
+              <button onClick="{{ requestChanges }}" style="font-size:14px; font-weight:600; color:#3F3D38; background:#F1ECE0; border:none; padding:13px 22px; border-radius:9px; cursor:pointer;">Request changes</button>
+            </div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ decisionMade }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; align-items:center; gap:12px; padding:18px; background:{{ decisionBg }}; border-radius:12px;">
+            <div style="width:36px; height:36px; border-radius:50%; background:{{ decisionIconBg }}; color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px;">{{ decisionIcon }}</div>
+            <div><div style="font-size:14px; font-weight:700; color:{{ decisionTextColor }};">{{ decisionTitle }}</div><div style="font-size:12.5px; color:#5C5A52;">{{ decisionDesc }}</div></div>
+          </div>
+          </sc-if>
+        </div>
+        <!-- comparison + progress -->
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div style="background:#0E3B36; border-radius:16px; padding:24px;">
+            <div style="font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#6E9C92; margin-bottom:18px;">Rate comparison</div>
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <div style="text-align:center;"><div style="font-size:11px; color:rgba(245,241,232,.55);">CURRENT</div><div style="font-family:'Newsreader',serif; font-size:34px; color:rgba(245,241,232,.7); font-variant-numeric:tabular-nums;">{{ reviewCurrentNum }}</div><div style="font-size:10px; color:rgba(245,241,232,.45);">{{ reviewRateLabel }}</div></div>
+              <span style="color:#C8A24C; font-size:24px;">→</span>
+              <div style="text-align:center;"><div style="font-size:11px; color:#C8A24C;">PROPOSED</div><div style="font-family:'Newsreader',serif; font-size:34px; color:#C8A24C; font-variant-numeric:tabular-nums;">{{ reviewProposedNum }}</div><div style="font-size:10px; color:rgba(245,241,232,.45);">{{ reviewRateLabel }}</div></div>
+            </div>
+            <div style="font-size:12px; color:rgba(245,241,232,.65); line-height:1.5; margin-top:18px; padding-top:16px; border-top:1px solid rgba(255,255,255,.12);">{{ reviewImpact }}</div>
+          </div>
+          <div style="background:#fff; border:1px solid #ECE6D8; border-radius:16px; padding:22px;">
+            <div style="font-size:13px; font-weight:700; margin-bottom:16px;">Approval progress · step {{ progressStep }} of 4</div>
+            <div style="display:flex; flex-direction:column;">
+              <sc-for list="{{ progress }}" as="g" hint-placeholder-count="4">
+                <div style="display:flex; gap:13px; align-items:flex-start;"><div style="display:flex; flex-direction:column; align-items:center;"><div style="width:24px; height:24px; border-radius:50%; background:{{ g.bg }}; color:{{ g.fg }}; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">{{ g.icon }}</div><div style="width:2px; height:22px; background:{{ g.line }};"></div></div><div style="padding-top:2px;"><div style="font-size:13px; font-weight:600; color:{{ g.titleColor }};">{{ g.title }}</div><div style="font-size:11px; color:#9A958A;">{{ g.sub }}</div></div></div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ===== DOCUMENTS ===== -->
+    <sc-if value="{{ isDocuments }}" hint-placeholder-val="{{ false }}">
+    <div class="view" style="background:#fff; border:1px solid #ECE6D8; border-radius:16px; overflow:hidden;">
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid #F1ECE0;"><div><div style="font-size:15px; font-weight:700;">Documents &amp; forms</div><div style="font-size:12px; color:#9A958A;">Member download center · version-controlled</div></div><button class="btn-pri" style="font-size:13px; font-weight:600; color:#F5F1E8; background:#0E3B36; border:none; padding:10px 16px; border-radius:9px; cursor:pointer;">+ Upload</button></div>
+      <div style="display:grid; grid-template-columns:2.2fr 1fr 1fr 1fr .7fr; padding:11px 22px; background:#FBF9F4; font-size:10.5px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:#9A958A;"><div>Document</div><div>Category</div><div>Version</div><div>Status</div><div></div></div>
+      <sc-for list="{{ documents }}" as="d" hint-placeholder-count="5">
+        <div class="row-h" style="display:grid; grid-template-columns:2.2fr 1fr 1fr 1fr .7fr; align-items:center; padding:14px 22px; border-top:1px solid #F1ECE0;">
+          <div style="display:flex; align-items:center; gap:11px;"><div style="width:30px; height:30px; border-radius:7px; background:#F6ECDA; color:#9C6B3F; display:flex; align-items:center; justify-content:center; font-size:13px;">▤</div><div><div style="font-size:13.5px; font-weight:600;">{{ d.name }}</div><div style="font-size:11px; color:#9A958A;">{{ d.updated }}</div></div></div>
+          <div style="font-size:13px; color:#5C5A52;">{{ d.category }}</div>
+          <div style="font-size:13px; color:#5C5A52; font-variant-numeric:tabular-nums;">{{ d.version }}</div>
+          <div><span style="font-size:11px; font-weight:600; color:{{ d.statusColor }}; background:{{ d.statusBg }}; padding:3px 9px; border-radius:20px;">{{ d.status }}</span></div>
+          <div style="text-align:right; font-size:13px; color:#9A958A;">⋯</div>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <!-- ===== AUDIT LOG ===== -->
+    <sc-if value="{{ isAudit }}" hint-placeholder-val="{{ false }}">
+    <div class="view" style="background:#fff; border:1px solid #ECE6D8; border-radius:16px; overflow:hidden;">
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid #F1ECE0;"><div><div style="font-size:15px; font-weight:700;">Audit log</div><div style="font-size:12px; color:#9A958A;">Immutable record of every change · exportable for NCUA</div></div><button style="font-size:13px; font-weight:600; color:#0E3B36; background:#F1ECE0; border:none; padding:10px 16px; border-radius:9px; cursor:pointer;">Export CSV</button></div>
+      <div style="display:grid; grid-template-columns:.9fr 1fr 2fr 1fr; padding:11px 22px; background:#FBF9F4; font-size:10.5px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:#9A958A;"><div>Timestamp</div><div>User</div><div>Action</div><div>Result</div></div>
+      <sc-for list="{{ auditLog }}" as="l" hint-placeholder-count="6">
+        <div class="row-h" style="display:grid; grid-template-columns:.9fr 1fr 2fr 1fr; align-items:center; padding:13px 22px; border-top:1px solid #F1ECE0;">
+          <div style="font-size:12.5px; color:#9A958A; font-variant-numeric:tabular-nums;">{{ l.time }}</div>
+          <div style="font-size:13px; font-weight:500; color:#1B1A16;">{{ l.user }}</div>
+          <div style="font-size:13px; color:#3F3D38;">{{ l.action }}</div>
+          <div><span style="font-size:11px; font-weight:600; color:{{ l.color }}; background:{{ l.bg }}; padding:3px 9px; border-radius:20px;">{{ l.result }}</span></div>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <!-- ===== CONFIG / RULES ===== -->
+    <sc-if value="{{ isConfig }}" hint-placeholder-val="{{ false }}">
+    <div class="view">
+      <div style="background:#fff; border:1px solid #ECE6D8; border-radius:16px; overflow:hidden;">
+        <div style="padding:18px 22px; border-bottom:1px solid #F1ECE0;"><div style="font-size:15px; font-weight:700;">Approval rules</div><div style="font-size:12px; color:#9A958A;">Configured by Super Admin · applies to all change requests</div></div>
+        <div style="display:grid; grid-template-columns:1.3fr 1fr 1.4fr 1fr; padding:11px 22px; background:#FBF9F4; font-size:10.5px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:#9A958A;"><div>Change type</div><div>Approval level</div><div>Who approves</div><div>Escalation</div></div>
+        <sc-for list="{{ rules }}" as="r" hint-placeholder-count="5">
+          <div class="row-h" style="display:grid; grid-template-columns:1.3fr 1fr 1.4fr 1fr; align-items:center; padding:15px 22px; border-top:1px solid #F1ECE0;">
+            <div style="font-size:13.5px; font-weight:600;">{{ r.type }}</div>
+            <div><span style="font-size:11px; font-weight:600; color:{{ r.lvlColor }}; background:{{ r.lvlBg }}; padding:3px 9px; border-radius:20px;">{{ r.level }}</span></div>
+            <div style="font-size:13px; color:#5C5A52;">{{ r.who }}</div>
+            <div style="font-size:13px; color:#5C5A52;">{{ r.escalation }}</div>
+          </div>
+        </sc-for>
+        <div style="display:flex; gap:18px; padding:16px 22px; background:#FBF9F4; border-top:1px solid #F1ECE0; font-size:12px; color:#6B6862;"><span>● Rejection requires a written comment</span><span>● All changes logged in audit trail</span><span>● Auto-escalation if no action in time</span></div>
+      </div>
+    </div>
+    </sc-if>
+
+    </main>
+  </div>
+
+  <!-- TOAST -->
+  <sc-if value="{{ showToast }}" hint-placeholder-val="{{ false }}">
+  <div class="toast" style="position:fixed; bottom:28px; left:50%; z-index:90; background:#0A2C28; color:#F5F1E8; padding:14px 22px; border-radius:12px; box-shadow:0 10px 30px rgba(10,44,40,.3); display:flex; align-items:center; gap:12px;">
+    <div style="width:22px; height:22px; border-radius:50%; background:#6E9C92; color:#0A2C28; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700;">✓</div>
+    <span style="font-size:13.5px; font-weight:500;">{{ toastMsg }}</span>
+  </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    section: 'dashboard',
+    toastMsg: '', toastOn: false,
+    // new rate change form
+    fcat: 'savings', fprodIdx: 1, fproposed: '4.90', feffective: '2026-04-15', fmin: '$2,500',
+    fjustification: 'Competitive rate adjustment to match regional credit union averages. Fed rate increase supports a higher APY.',
+    // review
+    reviewDecision: null, reviewComment: '',
+  };
+  componentWillUnmount(){ if(this._t) clearTimeout(this._t); }
+
+  PRODUCTS = {
+    savings: { label:'APY', items:[
+      { name:'Regular Savings', rate:4.25, min:'$25' },
+      { name:'Money Market', rate:4.75, min:'$2,500' },
+      { name:'Youth Savings', rate:4.50, min:'$5' },
+      { name:'Holiday Club', rate:4.10, min:'$0' },
+    ]},
+    loans: { label:'APR', items:[
+      { name:'New Auto Loan', rate:5.75, min:'—' },
+      { name:'Used Auto Loan', rate:6.25, min:'—' },
+      { name:'Personal Loan', rate:9.99, min:'—' },
+      { name:'HELOC', rate:7.50, min:'—' },
+    ]},
+    cds: { label:'APY', items:[
+      { name:'6-Month Certificate', rate:4.90, min:'$500' },
+      { name:'12-Month Certificate', rate:5.10, min:'$500' },
+      { name:'24-Month Certificate', rate:4.85, min:'$500' },
+      { name:'60-Month Certificate', rate:4.60, min:'$1,000' },
+    ]},
+    mortgages: { label:'APR', items:[
+      { name:'30-Year Fixed', rate:6.25, min:'—' },
+      { name:'15-Year Fixed', rate:5.75, min:'—' },
+      { name:'5/1 ARM', rate:5.95, min:'—' },
+      { name:'FHA Loan', rate:6.10, min:'—' },
+    ]},
+  };
+
+  go(sec){ this.setState({ section:sec }); if(typeof window!=='undefined') window.scrollTo(0,0); }
+  toast(msg){ if(this._t) clearTimeout(this._t); this.setState({ toastMsg:msg, toastOn:true }); this._t=setTimeout(()=>this.setState({ toastOn:false }), 2800); }
+
+  renderVals(){
+    const s = this.state;
+    const cat = this.PRODUCTS[s.fcat];
+    const idx = Math.min(s.fprodIdx, cat.items.length-1);
+    const prod = cat.items[idx];
+    const current = prod.rate;
+    const proposed = parseFloat(s.fproposed);
+    const delta = (isNaN(proposed)?0:proposed) - current;
+    const deltaAbs = Math.abs(delta).toFixed(2);
+    const deltaText = delta===0 ? 'No change' : (delta>0 ? '▲ +'+deltaAbs+' pts increase' : '▼ −'+deltaAbs+' pts decrease');
+    const deltaColor = delta===0 ? 'rgba(245,241,232,.7)' : (delta>0 ? '#9FD6C6' : '#E8C9B0');
+
+    const titles = {
+      dashboard: ['Dashboard', "Welcome back, Jameel · "+new Date(2026,3,9).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})],
+      rates: ['Rate Changes', 'Create a new rate change request'],
+      approvals: ['Approvals', '5 requests awaiting your review'],
+      review: ['Review Request', 'Rate change · dual approval required'],
+      documents: ['Documents', 'Member-facing forms & disclosures'],
+      audit: ['Audit Log', 'Immutable change history'],
+      config: ['Approval Rules', 'Workflow configuration'],
+    };
+    const tt = titles[s.section] || titles.dashboard;
+
+    const pending = [
+      { title:'Auto Loan rate · 5.99% → 5.75%', by:'A. Khan', type:'Rate Change', date:'Submitted Apr 8', approval:'Dual', tagColor:'#0E3B36', tagBg:'#E5EEEB' },
+      { title:'Money Market APY · 4.75% → 4.90%', by:'A. Khan', type:'Rate Change', date:'Submitted Apr 8', approval:'Dual', tagColor:'#0E3B36', tagBg:'#E5EEEB' },
+      { title:'CD 12-Mo rate · 5.10% → 5.25%', by:'A. Khan', type:'Rate Change', date:'Submitted Apr 8', approval:'Dual', tagColor:'#0E3B36', tagBg:'#E5EEEB' },
+      { title:'Holiday hours banner — Ramadan', by:'S. Patel', type:'Banner', date:'Submitted Apr 7', approval:'Single', tagColor:'#9C6B3F', tagBg:'#F6ECDA' },
+      { title:'Membership page — new benefits', by:'M. Ali', type:'Content', date:'Submitted Apr 6', approval:'Single', tagColor:'#9C6B3F', tagBg:'#F6ECDA' },
+    ].map(p=>({ ...p, open: ()=>this.go('review') }));
+
+    const activity = [
+      { text:'J. Smith updated savings rates (4.00 → 4.25%)', when:'Apr 8 · 2:30 PM', dot:'#0E3B36' },
+      { text:'A. Khan published the holiday hours banner', when:'Apr 7 · 11:05 AM', dot:'#C8A24C' },
+      { text:'System synced chatbot knowledge base (42 entries)', when:'Apr 6 · 3:00 AM', dot:'#6E9C92' },
+      { text:'M. Ali uploaded a new disclosure PDF', when:'Apr 5 · 4:18 PM', dot:'#9C6B3F' },
+    ];
+
+    const documents = [
+      { name:'Truth in Savings Disclosure.pdf', updated:'Updated Apr 5 by M. Ali', category:'Disclosures', version:'v4', status:'Published', statusColor:'#0E3B36', statusBg:'#E5EEEB' },
+      { name:'Membership Application.pdf', updated:'Updated Mar 28 by S. Patel', category:'Forms', version:'v7', status:'Published', statusColor:'#0E3B36', statusBg:'#E5EEEB' },
+      { name:'Auto Loan Agreement.pdf', updated:'Updated Apr 9 by A. Khan', category:'Loan Docs', version:'v2', status:'Draft', statusColor:'#9C6B3F', statusBg:'#F6ECDA' },
+      { name:'Fee Schedule 2026.pdf', updated:'Updated Jan 2 by System', category:'Disclosures', version:'v1', status:'Published', statusColor:'#0E3B36', statusBg:'#E5EEEB' },
+      { name:'Wire Transfer Request.pdf', updated:'Updated Feb 14 by M. Ali', category:'Forms', version:'v3', status:'Published', statusColor:'#0E3B36', statusBg:'#E5EEEB' },
+    ];
+
+    const auditLog = [
+      { time:'Apr 8 · 2:30p', user:'J. Smith', action:'Updated Regular Savings APY 4.00% → 4.25%', result:'Published', color:'#0E3B36', bg:'#E5EEEB' },
+      { time:'Apr 8 · 1:12p', user:'A. Khan', action:'Submitted Auto Loan rate change for approval', result:'Pending', color:'#9C6B3F', bg:'#F6ECDA' },
+      { time:'Apr 7 · 11:05a', user:'A. Khan', action:'Published holiday hours banner', result:'Published', color:'#0E3B36', bg:'#E5EEEB' },
+      { time:'Apr 7 · 9:40a', user:'J. Khan', action:'Rejected Money Market change — needs justification', result:'Rejected', color:'#9C3F3F', bg:'#F7E9E5' },
+      { time:'Apr 6 · 3:00a', user:'System', action:'Synced chatbot knowledge base (42 entries)', result:'Auto', color:'#5C5A52', bg:'#F1ECE0' },
+      { time:'Apr 5 · 4:18p', user:'M. Ali', action:'Uploaded Truth in Savings Disclosure v4', result:'Published', color:'#0E3B36', bg:'#E5EEEB' },
+    ];
+
+    const rules = [
+      { type:'Rate Change', level:'Dual approval', who:'Manager → Senior Manager', escalation:'48 hours', lvlColor:'#0E3B36', lvlBg:'#E5EEEB' },
+      { type:'Term Sheet Edit', level:'Dual approval', who:'Manager → Senior Manager', escalation:'48 hours', lvlColor:'#0E3B36', lvlBg:'#E5EEEB' },
+      { type:'Fee Schedule', level:'Dual approval', who:'Manager → Compliance', escalation:'48 hours', lvlColor:'#0E3B36', lvlBg:'#E5EEEB' },
+      { type:'Banner / Alert', level:'Single approval', who:'Manager only', escalation:'24 hours', lvlColor:'#9C6B3F', lvlBg:'#F6ECDA' },
+      { type:'Page Content', level:'Single approval', who:'Manager only', escalation:'24 hours', lvlColor:'#9C6B3F', lvlBg:'#F6ECDA' },
+      { type:'Chatbot FAQ', level:'Single approval', who:'Manager only', escalation:'24 hours', lvlColor:'#9C6B3F', lvlBg:'#F6ECDA' },
+    ];
+
+    // review detail (the featured Auto Loan request RC-2026-047)
+    const dec = s.reviewDecision;
+    const decMap = {
+      approved: { title:'Approved — sent to Senior Manager', desc:'Step 2 of 4 complete. Awaiting final sign-off, then auto-publish.', bg:'#E5EEEB', iconBg:'#0E3B36', icon:'✓', textColor:'#0E3B36' },
+      rejected: { title:'Rejected — returned to submitter', desc:'A. Khan has been notified with your comment for revision.', bg:'#F7E9E5', iconBg:'#9C3F3F', icon:'✕', textColor:'#9C3F3F' },
+      changes:  { title:'Changes requested', desc:'Returned to A. Khan with your notes. Re-submission required.', bg:'#F6ECDA', iconBg:'#9C6B3F', icon:'↺', textColor:'#9C6B3F' },
+    };
+    const dm = dec ? decMap[dec] : null;
+    const progressStep = dec==='approved' ? 3 : 2;
+    const mkProg = ()=>{
+      const reviewed = !!dec;
+      const yourState = dec==='approved' ? 'done' : (dec ? 'stop' : 'active');
+      const rows = [
+        { title:'Submitted by A. Khan', sub:'Apr 8, 2:30 PM', st:'done' },
+        { title:'Your review', sub: dec ? (dec==='approved'?'Approved just now':'Actioned just now') : 'In progress · your turn', st: yourState },
+        { title:'Senior Manager review', sub: dec==='approved' ? 'Notified · pending' : 'Waiting', st: dec==='approved'?'active':'wait' },
+        { title:'Auto-publish to site', sub:'—', st:'wait' },
+      ];
+      const styleFor = (st)=>{
+        if(st==='done') return { bg:'#0E3B36', fg:'#C8A24C', icon:'✓', line:'#0E3B36', titleColor:'#1B1A16' };
+        if(st==='active') return { bg:'#C8A24C', fg:'#0A2C28', icon:'●', line:'#E3DCCB', titleColor:'#1B1A16' };
+        if(st==='stop') return { bg:'#9C3F3F', fg:'#fff', icon:'✕', line:'#E3DCCB', titleColor:'#1B1A16' };
+        return { bg:'#F1ECE0', fg:'#9A958A', icon:'○', line:'#E3DCCB', titleColor:'#9A958A' };
+      };
+      return rows.map(r=>({ title:r.title, sub:r.sub, ...styleFor(r.st) }));
+    };
+
+    const go = (sec)=>()=>this.go(sec);
+    const prodOptions = cat.items.map((it,i)=>({ label: it.name, value: String(i) }));
+
+    return {
+      section: s.section,
+      isDashboard: s.section==='dashboard', isRates: s.section==='rates', isApprovals: s.section==='approvals',
+      isReview: s.section==='review', isDocuments: s.section==='documents', isAudit: s.section==='audit', isConfig: s.section==='config',
+      goDashboard: go('dashboard'), goRates: go('rates'), goApprovals: go('approvals'),
+      goDocuments: go('documents'), goAudit: go('audit'), goConfig: go('config'),
+      pageTitle: tt[0], pageSub: tt[1],
+
+      pending, activity, documents, auditLog, rules,
+
+      // form
+      fcat: s.fcat, fprodIdx: String(idx), fproposed: s.fproposed, feffective: s.feffective, fmin: s.fmin, fjustification: s.fjustification,
+      prodOptions, rateLabel: cat.label, prodName: prod.name,
+      currentRateFmt: current.toFixed(2)+'%', proposedRateFmt: (isNaN(proposed)?'—':proposed.toFixed(2)+'%'),
+      deltaText, deltaColor,
+      onCat: (e)=>this.setState({ fcat:e.target.value, fprodIdx:0, fproposed:String(this.PRODUCTS[e.target.value].items[0].rate.toFixed(2)), fmin:this.PRODUCTS[e.target.value].items[0].min }),
+      onProd: (e)=>{ const i=+e.target.value; const it=this.PRODUCTS[this.state.fcat].items[i]; this.setState({ fprodIdx:i, fproposed:String(it.rate.toFixed(2)), fmin:it.min }); },
+      onProposed: (e)=>this.setState({ fproposed:e.target.value }),
+      onEffective: (e)=>this.setState({ feffective:e.target.value }),
+      onMin: (e)=>this.setState({ fmin:e.target.value }),
+      onJust: (e)=>this.setState({ fjustification:e.target.value }),
+      submitRequest: ()=>{ this.toast('Request submitted — routed to Senior Manager for approval.'); this.go('approvals'); },
+      saveDraft: ()=>this.toast('Draft saved. You can submit it later from Rate Changes.'),
+
+      // review
+      reviewCategory:'Loans', reviewProduct:'New Auto Loan', reviewId:'RC-2026-047', reviewBy:'Aftab Khan',
+      reviewCurrent:'5.99% APR', reviewEffective:'April 15, 2026', reviewRateLabel:'APR',
+      reviewCurrentNum:'5.99%', reviewProposedNum:'5.75%',
+      reviewJustification:'Lowering the auto loan rate to remain competitive with regional credit-union averages (5.50–5.80%). Fed rate stabilization supports a decrease without margin risk.',
+      reviewImpact:'Est. impact: ~$8,200/yr in additional interest cost across the current auto-loan portfolio. Within approved margin tolerance.',
+      reviewComment: s.reviewComment,
+      onReviewComment: (e)=>this.setState({ reviewComment:e.target.value }),
+      decisionPending: !dec, decisionMade: !!dec,
+      decisionTitle: dm&&dm.title, decisionDesc: dm&&dm.desc, decisionBg: dm&&dm.bg, decisionIconBg: dm&&dm.iconBg, decisionIcon: dm&&dm.icon, decisionTextColor: dm&&dm.textColor,
+      approve: ()=>{ this.setState({ reviewDecision:'approved' }); this.toast('Approved — forwarded to Senior Manager.'); },
+      reject: ()=>{ this.setState({ reviewDecision:'rejected' }); this.toast('Rejected — submitter notified.'); },
+      requestChanges: ()=>{ this.setState({ reviewDecision:'changes' }); this.toast('Changes requested — returned to submitter.'); },
+      progress: mkProg(), progressStep,
+
+      // toast
+      showToast: s.toastOn, toastMsg: s.toastMsg,
+    };
+  }
+}
+</script>
+</body>
+</html>

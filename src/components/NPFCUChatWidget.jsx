@@ -231,7 +231,7 @@ function NPFCUChatWidget() {
               <div className="npfcucw-msg npfcucw-msg-assistant">
                 <div className="npfcucw-msg-avatar">◆</div>
                 <div className="npfcucw-msg-bubble npfcucw-greeting">
-                  Welcome! Chat as a guest or <a href="/login" onClick={(e) => { e.preventDefault(); navigate("/login"); }}>sign in</a> for more features.
+                  {token ? "Welcome back! How can I help you today?" : <>Welcome! Chat as a guest or <a href="/login" onClick={(e) => { e.preventDefault(); navigate("/login"); }}>sign in</a> for more features.</>}
                 </div>
               </div>
             )}

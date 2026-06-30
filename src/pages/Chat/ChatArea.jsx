@@ -42,6 +42,7 @@ const ChatArea = () => {
   const [showRefs, setShowRefs] = useState({});
   const [thinkingPhase, setThinkingPhase] = useState("idle");
   const token = useSelector((state) => state.auth.token);
+  const user = useSelector((state) => state.auth.user);
   const { conversations, activeConvId } = useSelector(
     (state) => state.conversation,
   );
@@ -174,9 +175,18 @@ const ChatArea = () => {
   };
 
   const handleRetry = (msgIdx) => {
+    const msg = activeConv.messages[msgIdx];
+    if (msg.role === "user") {
+      const prevContent = msg.content;
+      setInput(prevContent);
+      setTimeout(() => handleSend(prevContent), 50);
+      return;
+    }
     for (let i = msgIdx - 1; i >= 0; i--) {
       if (activeConv.messages[i].role === "user") {
-        handleSend(activeConv.messages[i].content);
+        const prevContent = activeConv.messages[i].content;
+        setInput(prevContent);
+        setTimeout(() => handleSend(prevContent), 50);
         break;
       }
     }
@@ -289,6 +299,23 @@ const ChatArea = () => {
                 </div>
               )}
             </div>
+
+            {msg.role === "user" && (
+              <div className="msg-actions" style={{ justifyContent: "flex-end" }}>
+                <button
+                  onClick={() => handleRetry(idx)}
+                  className="msg-action-btn"
+                  title="Retry"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="23 4 23 10 17 10" />
+                    <polyline points="1 20 1 14 7 14" />
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                  </svg>
+                  <span className="btn-label">Retry</span>
+                </button>
+              </div>
+            )}
 
             {msg.role === "assistant" &&
               msg.references?.length > 0 &&

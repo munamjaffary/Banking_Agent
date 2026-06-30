@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, Navigate } from "react-router-dom";
 import Assider from "../components/Assider";
 import Header from "../components/Header";
 import NPFCULayout from "../pages/Public/NPFCULayout";
@@ -16,6 +16,7 @@ import ChatArea from "../pages/Chat/ChatArea";
 import Search from "../components/Search";
 import KnowledgeBase from "../pages/KnowledgeBase/KnowledgeBase";
 import NLU from "../pages/NLU/NLU";
+import AdminPortal from "../pages/AdminPortal/AdminPortal";
 import AuthRouting from "./AuthRouting";
 import { resetConversations } from "../api/conversationSlice";
 
@@ -24,7 +25,10 @@ function PortalNPFCURouting() {
   const dispatch = useDispatch();
   const done = useRef(false);
   const location = useLocation();
+  const token = useSelector((state) => state.auth.token);
+  const isLoggedIn = !!token;
   const isPortal = location.pathname.startsWith("/portal");
+  const isAdmin = location.pathname === "/portal/admin";
   const isAuthPage = location.pathname === "/login" || location.pathname === "/signup" || location.pathname.startsWith("/checkemail") || location.pathname.startsWith("/activate");
 
   useEffect(() => {
@@ -37,6 +41,8 @@ function PortalNPFCURouting() {
   }, [dispatch]);
 
   if (isAuthPage) return <AuthRouting />;
+  if (isAdmin && !isLoggedIn) return <Navigate to="/" replace />;
+  if (isAdmin && isLoggedIn) return <AdminPortal />;
 
   return (
     <div className="app-wrapper">

@@ -27,7 +27,7 @@ function DashboardAnalytics() {
   const { data: docsData, isLoading } = useGetQuery({
     endpoint: endpoints.document.documenttable,
     params: { skip: 0, limit: 100 },
-  });
+  }, { pollingInterval: 10000 });
 
   const { data: catData } = useGetQuery({
     endpoint: endpoints.document.documentcategories,
@@ -222,7 +222,7 @@ function DashboardAnalytics() {
             ) : (
               <div className="kb-recent-list">
                 {recentUploads.map((doc, i) => {
-                  const name = doc.filename || doc.name || doc._id || "Untitled";
+                  const name = doc.document_name || doc.filename || doc.name || "Untitled Document";
                   const ext = name.includes(".") ? name.split(".").pop().toUpperCase() : "—";
                   const uploader = doc.uploaded_by?.name || doc.uploaded_by || doc.uploader || "Unknown";
                   const time = doc.createdAt

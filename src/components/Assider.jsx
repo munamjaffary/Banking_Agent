@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import GenAi from "../assets/icons/openai-icon.svg";
 import SideBar from "../assets/icons/sidebar-close.svg";
 import GridIcon from "../assets/icons/grid.svg";
+import NazariLogo from "../assets/icons/nazari-logo.png";
 import SettingsIcon from "../assets/icons/settings.svg";
 import LogOutIcon from "../assets/icons/logout.svg";
 import DotsIcon from "../assets/icons/dots.svg";
@@ -165,7 +166,7 @@ function Assider({ collapsed, setCollapsed }) {
         <div className="assiderlogo">
           {!collapsed && (
             <div className="logo-box">
-              <img src={GenAi} alt="Logo" />
+              <img src={NazariLogo} alt="Logo" style={{ height: "30px", width: "auto" }} />
             </div>
           )}
           <div
@@ -197,6 +198,25 @@ function Assider({ collapsed, setCollapsed }) {
                   style={{ marginBottom: "8px", fontWeight: 600 }}
                 >
                   <span className="tab-label">+ New Conversation</span>
+                </button>
+                <div className="section-title">Smart Engine</div>
+                <button
+                  className={`nav-tabs-button ${activeTab === "kb" ? "active" : ""}`}
+                  onClick={() => navigate("/portal/admin?section=knowledgebase")}
+                >
+                  <span className="tab-label">Knowledge Base</span>
+                </button>
+                <button
+                  className={`nav-tabs-button ${activeTab === "nlu" ? "active" : ""}`}
+                  onClick={() => navigate("/portal/admin?section=nlu")}
+                >
+                  <span className="tab-label">Smart Engine</span>
+                </button>
+                <button
+                  className={`nav-tabs-button ${activeTab === "chat" ? "active" : ""}`}
+                  onClick={() => navigate("/portal/admin?section=chat")}
+                >
+                  <span className="tab-label">Chat</span>
                 </button>
                 <div className="section-title">Chat History</div>
                 {conversations.map((chat) => (
