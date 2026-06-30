@@ -39,7 +39,7 @@ const DocumentTable = () => {
       skip: (currentPage - 1) * limit,
       limit: limit,
     },
-  });
+  }, { pollingInterval: 5000 });
 
   const tableData = (documenttable?.documents || []).map((doc) => ({
     ...doc,

@@ -157,13 +157,18 @@ function BulkUpload() {
     files.forEach((file) => {
       uploadProcess(file, category.value, handleUploadSuccess).catch((err) => {
         console.error("Upload error:", err);
-        const data = err?.data;
-        const status = err?.status || err?.originalStatus || "";
-        const detail = data?.detail;
-        const msg = Array.isArray(detail)
-          ? detail.map((d) => d.msg).join("; ")
-          : detail || data?.message || data?.status || err?.error || (data ? JSON.stringify(data).slice(0, 200) : "Upload failed");
-        toast.error(`${file.name}${status ? ` (${status})` : ""}: ${msg}`);
+        const isNetworkError = err?.status === "FETCH_ERROR" || err?.error?.includes("NetworkError");
+        if (isNetworkError) {
+          toast.error("Upload server unreachable. Please check your connection or try again.");
+        } else {
+          const data = err?.data;
+          const status = err?.status || err?.originalStatus || "";
+          const detail = data?.detail;
+          const msg = Array.isArray(detail)
+            ? detail.map((d) => d.msg).join("; ")
+            : detail || data?.message || data?.status || err?.error || (data ? JSON.stringify(data).slice(0, 200) : "Upload failed");
+          toast.error(`${file.name}${status ? ` (${status})` : ""}: ${msg}`);
+        }
       });
     });
   };

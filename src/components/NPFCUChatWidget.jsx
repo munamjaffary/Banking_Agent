@@ -18,7 +18,8 @@ function NPFCUChatWidget() {
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
   const location = useLocation();
-  const isFullChat = location.pathname === "/portal/chat";
+  const isLoggedIn = token && token !== "guest-session";
+  const isFullChat = location.pathname === "/portal/chat" || location.pathname.startsWith("/portal/admin");
   const [initSession] = useGenericMutation();
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -142,23 +143,6 @@ function NPFCUChatWidget() {
     toast.success("New conversation started");
   };
 
-  const handleDownloadTranscript = () => {
-    if (!activeConv?.messages?.length) {
-      toast.warn("No messages to download");
-      return;
-    }
-    const title = activeConv.messages[0]?.content || activeConv.title;
-    let text = `Chat Transcript: ${title}\n`;
-    text += `Date: ${new Date().toLocaleString()}\n`;
-    text += `${"=".repeat(50)}\n\n`;
-    for (const msg of activeConv.messages) {
-      text += `${msg.role === "user" ? "You" : "Assistant"}:\n${msg.content || ""}\n\n`;
-    }
-    const blob = new Blob([text], { type: "text/plain" });
-    downloadFileFromBlob(blob, `${title.substring(0, 40)}.txt`);
-    toast.success("Transcript downloaded");
-  };
-
   return (
     <>
       {!isFullChat && (
@@ -199,16 +183,9 @@ function NPFCUChatWidget() {
                       <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                     </svg>
                   </button>
-                  <button className="npfcucw-iconbtn" onClick={handleDownloadTranscript} title="Download Transcript">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                      <polyline points="7 10 12 15 17 10" />
-                      <line x1="12" y1="15" x2="12" y2="3" />
-                    </svg>
-                  </button>
                 </>
               )}
-              <button className="npfcucw-iconbtn" onClick={() => { setOpen(false); navigate("/portal/chat"); }} title="Open Full Chat">
+              <button className="npfcucw-iconbtn" onClick={() => { setOpen(false); if (isLoggedIn) { dispatch(createNewChat()); navigate("/portal/admin?section=chat"); } else { navigate("/portal/chat"); } }} title="Open Full Chat">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                   <polyline points="17 8 14 8 14 11" />

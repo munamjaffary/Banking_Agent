@@ -330,8 +330,10 @@ function AdminPortal() {
             <button onClick={() => setSection("rates")} style={{ fontSize: "13px", fontWeight: 600, color: "#F5F1E8", background: "#0E3B36", border: "none", padding: "11px 18px", borderRadius: "9px", cursor: "pointer" }}>+ New request</button>
           </div>
         </header>
-        <main className="custom-scrollbar" style={{ flex: 1, padding: "28px", overflowY: "auto" }}>
-          {renderContent()}
+        <main className="custom-scrollbar" style={{ flex: 1, padding: section === "chat" ? 0 : "28px", overflow: section === "chat" ? "hidden" : "auto", minHeight: 0 }}>
+          <div style={{ height: "100%", display: section === "chat" ? "flex" : "block", flexDirection: "column" }}>
+            {renderContent()}
+          </div>
         </main>
       </div>
     </div>
@@ -410,7 +412,7 @@ function ChatSection() {
   const panelWidth = historyOpen ? 260 : 0;
 
   return (
-    <div style={{ display: "flex", height: "100%" }}>
+    <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
       <div style={{
         width: panelWidth,
         minWidth: panelWidth,
@@ -450,7 +452,7 @@ function ChatSection() {
             <span style={{ fontSize: "11px", fontWeight: 500 }}>{historyOpen ? "Hide" : "Show"} history</span>
           </button>
         </div>
-        <div style={{ flex: 1, minHeight: 0 }}>
+        <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
           <ChatArea />
         </div>
       </div>

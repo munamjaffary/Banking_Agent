@@ -62,7 +62,7 @@ const ChatArea = () => {
       setThinkingPhase("thinking");
       thinkingTimerRef.current = setTimeout(() => {
         setThinkingPhase("fetching");
-      }, 5000);
+      }, 3000);
     } else {
       setThinkingPhase("idle");
       if (thinkingTimerRef.current) {
@@ -201,34 +201,6 @@ const ChatArea = () => {
     toast.success("New conversation started");
   };
 
-  const handleDownloadTranscript = () => {
-    if (!activeConv?.messages?.length) {
-      toast.warn("No messages to download");
-      return;
-    }
-    const title =
-      activeConv.messages.length > 0
-        ? activeConv.messages[0].content
-        : activeConv.title;
-    let text = `Chat Transcript: ${title}\n`;
-    text += `Date: ${new Date().toLocaleString()}\n`;
-    text += `${"=".repeat(50)}\n\n`;
-
-    for (const msg of activeConv.messages) {
-      const role = msg.role === "user" ? "You" : "Assistant";
-      text += `${role}:\n${msg.content || ""}\n\n`;
-    }
-
-    const blob = new Blob([text], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${title.substring(0, 40)}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
-    toast.success("Transcript downloaded");
-  };
-
   return (
     <div className="chat-container">
       {activeConv?.messages?.length > 0 && (
@@ -240,14 +212,7 @@ const ChatArea = () => {
             </svg>
             <span className="btn-hover-label">Clear Chat</span>
           </button>
-          <button className="icon-label-btn" onClick={handleDownloadTranscript}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            <span className="btn-hover-label">Download Transcript</span>
-          </button>
+
           <button className="icon-label-btn" onClick={() => navigate(-1)}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="23 18 17 12 23 6" />
@@ -419,32 +384,32 @@ const ChatArea = () => {
                   </svg>
                   <span className="btn-label">Retry</span>
                 </button>
-                {msg.references?.length > 0 && (
-                  <button
-                    onClick={() => toggleRefs(idx)}
-                    className={`msg-action-btn ${showRefs[idx] ? "active" : ""}`}
-                    title="References"
+                <button
+                  onClick={() => toggleRefs(idx)}
+                  className={`msg-action-btn ${showRefs[idx] ? "active" : ""}`}
+                  title="References"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                      <polyline points="14 2 14 8 20 8" />
-                      <line x1="16" y1="13" x2="8" y2="13" />
-                      <line x1="16" y1="17" x2="8" y2="17" />
-                      <polyline points="10 9 9 9 8 9" />
-                    </svg>
-                    <span className="btn-label">References</span>
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                    <polyline points="10 9 9 9 8 9" />
+                  </svg>
+                  <span className="btn-label">References</span>
+                  {msg.references?.length > 0 && (
                     <span className="ref-badge">{msg.references.length}</span>
-                  </button>
-                )}
+                  )}
+                </button>
                 <button className="msg-action-btn" title="Thumbs Up">
                   <svg
                     width="14"
@@ -486,30 +451,7 @@ const ChatArea = () => {
                   </svg>
                   <span className="btn-label">Clear Chat</span>
                 </button>
-                <button
-                  onClick={handleDownloadTranscript}
-                  className="msg-action-btn"
-                  title="Download Transcript"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="7 10 12 15 17 10" />
-                    <line x1="12" y1="15" x2="12" y2="3" />
-                  </svg>
-                  <span className="btn-label">Download Transcript</span>
-                </button>
-                <button
-                  onClick={handleDownloadTranscript}
-                  className="msg-action-btn"
-                  title="Full Conversation"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                    <line x1="8" y1="9" x2="16" y2="9" />
-                    <line x1="8" y1="13" x2="14" y2="13" />
-                  </svg>
-                  <span className="btn-label">Full Conversation</span>
-                </button>
+
               </div>
             )}
           </div>
@@ -517,7 +459,7 @@ const ChatArea = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="chat-input-section" style={!activeConv?.messages?.length ? { bottom: '80px' } : {}}>
+      <div className="chat-input-section">
         <div className="input-wrapper">
           <input
             type="text"

@@ -46,7 +46,7 @@ function PortalNPFCURouting() {
 
   return (
     <div className="app-wrapper">
-      {isPortal && (
+      {isLoggedIn && isPortal && (
         <div className={collapsed ? "sidebar-collapsed" : "sidebar-expanded"}>
           <Assider collapsed={collapsed} setCollapsed={setCollapsed} />
         </div>
