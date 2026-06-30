@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useGenericMutation } from "../../../api/apiSlice";
 import { endpoints } from "../../../api/config";
@@ -11,6 +11,7 @@ import LoginArrow from "../../../assets/icons/login-btn.svg";
 import { getErrorMessage } from "../../../utils/HelperFunction";
 
 function Login() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [login, { isLoading }] = useGenericMutation();
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -51,6 +52,25 @@ function Login() {
 
   return (
     <div className="login-container">
+      <div
+        onClick={() => navigate("/")}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          cursor: "pointer",
+          marginBottom: "20px",
+          padding: "8px 0",
+        }}
+      >
+        <div style={{ width: "34px", height: "34px", background: "#0E3B36", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: "14px", height: "14px", background: "#C8A24C", transform: "rotate(45deg)", borderRadius: "2px" }} />
+        </div>
+        <div>
+          <div style={{ fontWeight: "700", fontSize: "15px", color: "#0E3B36", lineHeight: "1.2" }}>Nizari Progressive</div>
+          <div style={{ fontWeight: "600", fontSize: "9px", letterSpacing: ".2em", textTransform: "uppercase", color: "#9C6B3F", marginTop: "1px" }}>Federal Credit Union</div>
+        </div>
+      </div>
       <div className="login-info-container">
         <div className="login-heading">
           <p>Nizari Progressive</p>

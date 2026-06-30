@@ -16,6 +16,7 @@ import ChatArea from "../pages/Chat/ChatArea";
 import Search from "../components/Search";
 import KnowledgeBase from "../pages/KnowledgeBase/KnowledgeBase";
 import NLU from "../pages/NLU/NLU";
+import AuthRouting from "./AuthRouting";
 import { resetConversations } from "../api/conversationSlice";
 
 function PortalNPFCURouting() {
@@ -24,6 +25,7 @@ function PortalNPFCURouting() {
   const done = useRef(false);
   const location = useLocation();
   const isPortal = location.pathname.startsWith("/portal");
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/signup" || location.pathname.startsWith("/checkemail") || location.pathname.startsWith("/activate");
 
   useEffect(() => {
     if (done.current) return;
@@ -33,6 +35,8 @@ function PortalNPFCURouting() {
       dispatch(resetConversations());
     }
   }, [dispatch]);
+
+  if (isAuthPage) return <AuthRouting />;
 
   return (
     <div className="app-wrapper">

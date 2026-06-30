@@ -284,33 +284,53 @@ function Assider({ collapsed, setCollapsed }) {
         <div className="assider-footer" ref={menuRef}>
           {showProfileMenu && !collapsed && (
             <div className="profile-dropdown-menu">
-              <div className="dropdown-user-info">
-                <div className="small-avatar">
-                  {user?.username ? getInitials(user.username) : "AA"}
-                </div>
-                <div className="user-meta">
-                  <span className="dropdown-name">
-                    {user?.username || "Junaid"}
-                  </span>
-                  <span style={{ fontSize: "11px", color: "#9C6B3F", fontWeight: "500" }}>
-                    {user?.role || user?.user_type || ""}
-                  </span>
-                  <span className="dropdown-email">
-                    {user?.email || "@muhammadjunaid.irfan"}
-                  </span>
-                </div>
-              </div>
-              <hr className="dropdown-divider" />
-              <button className="dropdown-item">
-                <img src={GridIcon} alt="GridIcon" /> Upgrade plan
-              </button>
-              <button className="dropdown-item">
-                <img src={SettingsIcon} alt="SettingsIcon" /> Settings
-              </button>
-              <hr className="dropdown-divider" />
-              <button className="dropdown-item logout" onClick={handleLogout}>
-                <img src={LogOutIcon} alt="LogOutIcon" /> Log Out
-              </button>
+              {user ? (
+                <>
+                  <div className="dropdown-user-info">
+                    <div className="small-avatar">
+                      {user?.username ? getInitials(user.username) : "AA"}
+                    </div>
+                    <div className="user-meta">
+                      <span className="dropdown-name">
+                        {user?.username || "Junaid"}
+                      </span>
+                      <span style={{ fontSize: "11px", color: "#9C6B3F", fontWeight: "500" }}>
+                        {user?.role || user?.user_type || ""}
+                      </span>
+                      <span className="dropdown-email">
+                        {user?.email || "@muhammadjunaid.irfan"}
+                      </span>
+                    </div>
+                  </div>
+                  <hr className="dropdown-divider" />
+                  <button className="dropdown-item">
+                    <img src={GridIcon} alt="GridIcon" /> Upgrade plan
+                  </button>
+                  <button className="dropdown-item">
+                    <img src={SettingsIcon} alt="SettingsIcon" /> Settings
+                  </button>
+                  <hr className="dropdown-divider" />
+                  <button className="dropdown-item logout" onClick={handleLogout}>
+                    <img src={LogOutIcon} alt="LogOutIcon" /> Log Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="dropdown-user-info">
+                    <div className="small-avatar">
+                      {user?.username ? getInitials(user.username) : "AA"}
+                    </div>
+                    <div className="user-meta">
+                      <span className="dropdown-name">Anonymous</span>
+                      <span className="dropdown-email">anonymous@guest</span>
+                    </div>
+                  </div>
+                  <hr className="dropdown-divider" />
+                  <button className="dropdown-item" onClick={() => { setShowProfileMenu(false); navigate("/login"); }}>
+                    <img src={LogOutIcon} alt="Login" /> Sign In
+                  </button>
+                </>
+              )}
             </div>
           )}
           <div
