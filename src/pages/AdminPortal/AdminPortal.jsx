@@ -14,7 +14,7 @@ import AuditLog from "./AuditLog";
 import ApprovalRules from "./ApprovalRules";
 import DocumentsSection from "./DocumentsSection";
 import ApprovalsQueue from "./ApprovalsQueue";
-import { createNewChat, selectChat, renameChat, deleteChat, resetConversations } from "../../api/conversationSlice";
+import { createNewChat, selectChat, renameChat, deleteChat, resetConversations, seedNluChats } from "../../api/conversationSlice";
 import { setLogout } from "../../redux/authSlice";
 
 const sections = [
@@ -350,6 +350,10 @@ function ChatSection() {
   const renameRef = useRef(null);
 
   useEffect(() => {
+    dispatch(seedNluChats());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (renameId && renameRef.current) {
       renameRef.current.focus();
       renameRef.current.select();
@@ -473,12 +477,27 @@ function ChatHistoryPanel({ conversations, activeConvId, menuOpenId, renameId, r
   const groups = {};
   const list = searchQuery ? filteredConversations : conversations;
   for (const chat of list) {
-    const diff = (now - new Date(chat.createdAt || now)) / (1000 * 60 * 60 * 24);
-    const cat = diff < 1 ? "Today" : diff <= 7 ? "Previous 7 Days" : "Older Chats";
+    const d = new Date(chat.createdAt || now);
+    const diffDays = (now - d) / (1000 * 60 * 60 * 24);
+    const diffWeeks = diffDays / 7;
+    let cat;
+    if (diffDays < 1) {
+      cat = "Today";
+    } else if (d.getDay() <= now.getDay() && diffDays < 7) {
+      cat = "This Week";
+    } else if (diffWeeks < 2) {
+      cat = "Last Week";
+    } else if (diffDays < 30) {
+      cat = "This Month";
+    } else if (diffDays < 60) {
+      cat = "Last Month";
+    } else {
+      cat = "Older";
+    }
     if (!groups[cat]) groups[cat] = [];
     groups[cat].push(chat);
   }
-  const order = ["Today", "Previous 7 Days", "Older Chats"];
+  const order = ["Today", "This Week", "Last Week", "This Month", "Last Month", "Older"];
 
   return (
     <>

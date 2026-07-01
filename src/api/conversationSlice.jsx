@@ -60,6 +60,7 @@
 // export default conversationSlice.reducer;
 
 import { createSlice } from "@reduxjs/toolkit";
+import { REHYDRATE } from "redux-persist";
 import { nluSessionsToChats, rawEntries } from "../data/nluData";
 
 const nluChats = nluSessionsToChats(rawEntries).map((c, i) => ({
@@ -71,6 +72,13 @@ const initialState = {
   conversations: [{ id: 1, title: "New Chat", messages: [] }, ...nluChats],
   activeConvId: 1,
 };
+
+function buildNluChats() {
+  return nluSessionsToChats(rawEntries).map((c, i) => ({
+    ...c,
+    id: i + 2,
+  }));
+}
 
 const conversationSlice = createSlice({
   name: "conversation",
@@ -152,6 +160,37 @@ const conversationSlice = createSlice({
       }
     },
 
+    seedNluChats: (state) => {
+      const nluChats = buildNluChats();
+      const existingIds = new Set(state.conversations.map((c) => c.id));
+      for (const chat of nluChats) {
+        if (!existingIds.has(chat.id)) {
+          state.conversations.push(chat);
+          existingIds.add(chat.id);
+        }
+      }
+      if (state.activeConvId === null) {
+        state.activeConvId = state.conversations[0]?.id ?? null;
+      }
+    },
+
+  },
+  extraReducers: (builder) => {
+    builder.addCase(REHYDRATE, (state) => {
+      const nluChats = buildNluChats();
+      const existingIds = new Set(state.conversations?.map((c) => c.id) || []);
+      let added = false;
+      for (const chat of nluChats) {
+        if (!existingIds.has(chat.id)) {
+          state.conversations.push(chat);
+          existingIds.add(chat.id);
+          added = true;
+        }
+      }
+      if (added && state.activeConvId == null) {
+        state.activeConvId = state.conversations[0]?.id ?? null;
+      }
+    });
   },
 });
 
@@ -165,6 +204,7 @@ export const {
   truncateMessages,
   addMessage,
   updateLastMessage,
+  seedNluChats,
 } = conversationSlice.actions;
 
 export default conversationSlice.reducer;
