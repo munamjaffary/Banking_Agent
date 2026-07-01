@@ -13,7 +13,7 @@ export const userRoles = {
 export const rawEntries = [
   {
     _id: "6a3ed3ebdbbce96770b75f75",
-    session_id: "munam.ali@integrationxperts.com_default",
+    session_id: "SessionID_greeting",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Hi",
@@ -25,7 +25,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3ef1af82cadfa94aaaf00a",
-    session_id: "SessionID_9211b058-f797-4096-a869-c9f7c941a8b8",
+    session_id: "SessionID_car_loans",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "I need to inquire about carloans, can you help with that?",
@@ -44,7 +44,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3ef29182cadfa94aaaf00b",
-    session_id: "SessionID_9211b058-f797-4096-a869-c9f7c941a8b8",
+    session_id: "SessionID_car_loans",
     user_email: "munam.ali@integrationxperts.com",
     query: "can you provide me a summary about carloans?",
     response:
@@ -59,7 +59,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3ef382fc49ca5383beb056",
-    session_id: "SessionID_9211b058-f797-4096-a869-c9f7c941a8b8",
+    session_id: "SessionID_car_loans",
     user_email: "munam.ali@integrationxperts.com",
     query: "can you provide me a summary about carloans?",
     response:
@@ -74,7 +74,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3ef482fc49ca5383beb057",
-    session_id: "SessionID_a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    session_id: "SessionID_rates_inquiry",
     user_email: "john.doe@example.com",
     role: userRoles["john.doe@example.com"],
     query: "What are your current savings account interest rates?",
@@ -90,7 +90,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3ef582fc49ca5383beb058",
-    session_id: "SessionID_b2c3d4e5-f6a7-8901-bcde-f12345678901",
+    session_id: "SessionID_branch_hours",
     user_email: "jane.smith@example.com",
     role: userRoles["jane.smith@example.com"],
     query: "What time does the branch open on Saturdays?",
@@ -104,7 +104,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3ef682fc49ca5383beb059",
-    session_id: "SessionID_c3d4e5f6-a7b8-9012-cdef-123456789012",
+    session_id: "SessionID_cards_rates",
     user_email: "bob.wilson@example.com",
     role: userRoles["bob.wilson@example.com"],
     query: "I lost my credit card, what should I do?",
@@ -124,7 +124,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3ef782fc49ca5383beb05a",
-    session_id: "SessionID_d4e5f6a7-b8c9-0123-defa-234567890123",
+    session_id: "SessionID_savings_accounts",
     user_email: "alice.johnson@example.com",
     role: userRoles["alice.johnson@example.com"],
     query: "How do I become a member of NPFCU?",
@@ -140,7 +140,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3ef882fc49ca5383beb05b",
-    session_id: "SessionID_e5f6a7b8-c9d0-1234-efab-345678901234",
+    session_id: "SessionID_savings_rates",
     user_email: "charlie.brown@example.com",
     role: userRoles["charlie.brown@example.com"],
     query: "Can I make a payment on my mortgage online?",
@@ -159,7 +159,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3ef982fc49ca5383beb05c",
-    session_id: "SessionID_f6a7b8c9-d0e1-2345-fabc-456789012345",
+    session_id: "SessionID_fraud_alert",
     user_email: "diana.prince@example.com",
     role: userRoles["diana.prince@example.com"],
     query: "What documents do I need to apply for a personal loan?",
@@ -175,7 +175,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3efa82fc49ca5383beb05d",
-    session_id: "SessionID_c3d4e5f6-a7b8-9012-cdef-123456789012",
+    session_id: "SessionID_cards_rates",
     user_email: "bob.wilson@example.com",
     role: userRoles["bob.wilson@example.com"],
     query: "Can I get a temporary card while I wait for the replacement?",
@@ -191,7 +191,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3efb82fc49ca5383beb05e",
-    session_id: "SessionID_c3d4e5f6-a7b8-9012-cdef-123456789012",
+    session_id: "SessionID_cards_rates",
     user_email: "bob.wilson@example.com",
     role: userRoles["bob.wilson@example.com"],
     query: "Will I be charged for unauthorized transactions?",
@@ -204,7 +204,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3efc82fc49ca5383beb05f",
-    session_id: "SessionID_a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    session_id: "SessionID_rates_inquiry",
     user_email: "john.doe@example.com",
     role: userRoles["john.doe@example.com"],
     query: "What is the minimum balance for the Premium Savings account?",
@@ -220,7 +220,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3efd82fc49ca5383beb060",
-    session_id: "SessionID_a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    session_id: "SessionID_rates_inquiry",
     user_email: "john.doe@example.com",
     role: userRoles["john.doe@example.com"],
     query: "Can I link my Premium Savings to my checking for overdraft protection?",
@@ -236,7 +236,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3efe82fc49ca5383beb061",
-    session_id: "SessionID_d4e5f6a7-b8c9-0123-defa-234567890123",
+    session_id: "SessionID_savings_accounts",
     user_email: "alice.johnson@example.com",
     role: userRoles["alice.johnson@example.com"],
     query: "What are the benefits of NPFCU membership over traditional banks?",
@@ -249,7 +249,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3eff82fc49ca5383beb062",
-    session_id: "SessionID_d4e5f6a7-b8c9-0123-defa-234567890123",
+    session_id: "SessionID_savings_accounts",
     user_email: "alice.johnson@example.com",
     role: userRoles["alice.johnson@example.com"],
     query: "Do you offer joint membership accounts?",
@@ -265,7 +265,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0082fc49ca5383beb063",
-    session_id: "SessionID_g1h2i3j4-k5l6-7890-mnop-qrst1234567890",
+    session_id: "SessionID_payments",
     user_email: "jane.smith@example.com",
     role: userRoles["jane.smith@example.com"],
     query: "Can I set up automatic payments for my credit card?",
@@ -281,7 +281,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0182fc49ca5383beb064",
-    session_id: "SessionID_g1h2i3j4-k5l6-7890-mnop-qrst1234567890",
+    session_id: "SessionID_payments",
     user_email: "jane.smith@example.com",
     role: userRoles["jane.smith@example.com"],
     query: "Is there a fee for credit card payments?",
@@ -298,7 +298,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0282fc49ca5383beb065",
-    session_id: "SessionID_h2i3j4k5-l6m7-8901-nopq-rstu2345678901",
+    session_id: "SessionID_loan_rates",
     user_email: "charlie.brown@example.com",
     role: userRoles["charlie.brown@example.com"],
     query: "What types of credit cards does NPFCU offer?",
@@ -314,7 +314,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0382fc49ca5383beb066",
-    session_id: "SessionID_h2i3j4k5-l6m7-8901-nopq-rstu2345678901",
+    session_id: "SessionID_loan_rates",
     user_email: "charlie.brown@example.com",
     role: userRoles["charlie.brown@example.com"],
     query: "How long does it take to get approved for a credit card?",
@@ -327,7 +327,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0482fc49ca5383beb067",
-    session_id: "SessionID_i3j4k5l6-m7n8-9012-opqr-stuv3456789012",
+    session_id: "SessionID_dispute",
     user_email: "diana.prince@example.com",
     role: userRoles["diana.prince@example.com"],
     query: "How do I check my loan application status?",
@@ -343,7 +343,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0582fc49ca5383beb068",
-    session_id: "SessionID_i3j4k5l6-m7n8-9012-opqr-stuv3456789012",
+    session_id: "SessionID_dispute",
     user_email: "diana.prince@example.com",
     role: userRoles["diana.prince@example.com"],
     query: "What is the typical interest rate for a personal loan?",
@@ -359,7 +359,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0682fc49ca5383beb069",
-    session_id: "SessionID_j4k5l6m7-n8o9-0123-pqrs-tuvw4567890123",
+    session_id: "SessionID_fraud_claim",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "I think someone accessed my account without permission",
@@ -376,7 +376,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0782fc49ca5383beb070",
-    session_id: "SessionID_j4k5l6m7-n8o9-0123-pqrs-tuvw4567890123",
+    session_id: "SessionID_fraud_claim",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Can you freeze my account while we investigate?",
@@ -392,7 +392,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0882fc49ca5383beb071",
-    session_id: "SessionID_k5l6m7n8-o9p0-1234-qrst-uvwx5678901234",
+    session_id: "SessionID_payment_plans",
     user_email: "bob.wilson@example.com",
     role: userRoles["bob.wilson@example.com"],
     query: "What is the process for disputing a charge?",
@@ -408,7 +408,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0982fc49ca5383beb072",
-    session_id: "SessionID_k5l6m7n8-o9p0-1234-qrst-uvwx5678901234",
+    session_id: "SessionID_payment_plans",
     user_email: "bob.wilson@example.com",
     role: userRoles["bob.wilson@example.com"],
     query: "Will I get a refund while the dispute is being investigated?",
@@ -424,7 +424,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0a82fc49ca5383beb073",
-    session_id: "SessionID_l6m7n8o9-p0q1-2345-rstu-vwxy6789012345",
+    session_id: "SessionID_account_services",
     user_email: "alice.johnson@example.com",
     role: userRoles["alice.johnson@example.com"],
     query: "How do I add someone as an authorized user on my account?",
@@ -440,7 +440,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0b82fc49ca5383beb074",
-    session_id: "SessionID_l6m7n8o9-p0q1-2345-rstu-vwxy6789012345",
+    session_id: "SessionID_account_services",
     user_email: "alice.johnson@example.com",
     role: userRoles["alice.johnson@example.com"],
     query: "Can authorized users have their own debit cards?",
@@ -456,7 +456,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0c82fc49ca5383beb075",
-    session_id: "SessionID_m7n8o9p0-q1r2-3456-stuv-wxyz7890123456",
+    session_id: "SessionID_investment",
     user_email: "john.doe@example.com",
     role: userRoles["john.doe@example.com"],
     query: "Are there any promotional rates for new savings accounts?",
@@ -472,7 +472,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0d82fc49ca5383beb076",
-    session_id: "SessionID_m7n8o9p0-q1r2-3456-stuv-wxyz7890123456",
+    session_id: "SessionID_investment",
     user_email: "john.doe@example.com",
     role: userRoles["john.doe@example.com"],
     query: "What happens after the promotional period ends?",
@@ -488,7 +488,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0e82fc49ca5383beb077",
-    session_id: "anonymous_session_001",
+    session_id: "SessionID_anon_loans",
     user_email: "anonymous@guest",
     role: userRoles["anonymous@guest"],
     query: "What are your current mortgage rates?",
@@ -507,7 +507,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f0f82fc49ca5383beb078",
-    session_id: "anonymous_session_001",
+    session_id: "SessionID_anon_loans",
     user_email: "anonymous@guest",
     role: userRoles["anonymous@guest"],
     query: "What documents do I need for a mortgage application?",
@@ -523,7 +523,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1082fc49ca5383beb079",
-    session_id: "anonymous_session_001",
+    session_id: "SessionID_anon_loans",
     user_email: "anonymous@guest",
     role: userRoles["anonymous@guest"],
     query: "What is the minimum down payment for a first-time home buyer?",
@@ -542,7 +542,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1182fc49ca5383beb080",
-    session_id: "anonymous_session_002",
+    session_id: "SessionID_anon_account",
     user_email: "anonymous@guest",
     role: userRoles["anonymous@guest"],
     query: "How do I reset my online banking password?",
@@ -558,7 +558,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1282fc49ca5383beb081",
-    session_id: "anonymous_session_002",
+    session_id: "SessionID_anon_account",
     user_email: "anonymous@guest",
     role: userRoles["anonymous@guest"],
     query: "Is there a mobile app for NPFCU?",
@@ -574,7 +574,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1382fc49ca5383beb082",
-    session_id: "anonymous_session_002",
+    session_id: "SessionID_anon_account",
     user_email: "anonymous@guest",
     role: userRoles["anonymous@guest"],
     query: "Does the mobile app support biometric login?",
@@ -587,7 +587,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1482fc49ca5383beb083",
-    session_id: "anonymous_session_003",
+    session_id: "SessionID_anon_membership",
     user_email: "anonymous@guest",
     role: userRoles["anonymous@guest"],
     query: "What are the benefits of a credit union vs a bank?",
@@ -606,7 +606,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1582fc49ca5383beb084",
-    session_id: "anonymous_session_003",
+    session_id: "SessionID_anon_membership",
     user_email: "anonymous@guest",
     role: userRoles["anonymous@guest"],
     query: "Can I open an account online?",
@@ -622,7 +622,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1682fc49ca5383beb085",
-    session_id: "anonymous_session_003",
+    session_id: "SessionID_anon_membership",
     user_email: "anonymous@guest",
     role: userRoles["anonymous@guest"],
     query: "What is the minimum age requirement for membership?",
@@ -639,7 +639,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1782fc49ca5383beb086",
-    session_id: "anonymous_session_004",
+    session_id: "SessionID_anon_fraud",
     user_email: "anonymous@guest",
     role: userRoles["anonymous@guest"],
     query: "What should I do if I see unauthorized transactions?",
@@ -659,7 +659,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1882fc49ca5383beb087",
-    session_id: "anonymous_session_004",
+    session_id: "SessionID_anon_fraud",
     user_email: "anonymous@guest",
     role: userRoles["anonymous@guest"],
     query: "How does NPFCU protect my personal information?",
@@ -678,7 +678,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1982fc49ca5383beb088",
-    session_id: "anonymous_session_004",
+    session_id: "SessionID_anon_fraud",
     user_email: "anonymous@guest",
     role: userRoles["anonymous@guest"],
     query: "Do you offer identity theft protection services?",
@@ -694,7 +694,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1a82fc49ca5383beb089",
-    session_id: "admin_business_session_001",
+    session_id: "SessionID_business_loans",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "What are the current business loan options available at NPFCU?",
@@ -706,7 +706,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1b82fc49ca5383beb08a",
-    session_id: "admin_business_session_001",
+    session_id: "SessionID_business_loans",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "What documents do I need to apply for a business line of credit?",
@@ -718,7 +718,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1c82fc49ca5383beb08b",
-    session_id: "admin_business_session_001",
+    session_id: "SessionID_business_loans",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Is there a prepayment penalty on business term loans?",
@@ -730,7 +730,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1d82fc49ca5383beb08c",
-    session_id: "admin_education_session_001",
+    session_id: "SessionID_education_savings",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Tell me about education savings options for my children's college fund",
@@ -742,7 +742,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1e82fc49ca5383beb08d",
-    session_id: "admin_education_session_001",
+    session_id: "SessionID_education_savings",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "What is the minimum deposit to open an Education Savings Account?",
@@ -754,7 +754,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f1f82fc49ca5383beb08e",
-    session_id: "admin_education_session_001",
+    session_id: "SessionID_education_savings",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Are Education Savings accounts FDIC insured?",
@@ -766,7 +766,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2082fc49ca5383beb08f",
-    session_id: "admin_personal_loans_session_001",
+    session_id: "SessionID_personal_loans",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "What can personal loans be used for at NPFCU?",
@@ -778,7 +778,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2182fc49ca5383beb090",
-    session_id: "admin_personal_loans_session_001",
+    session_id: "SessionID_personal_loans",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Compare your personal loan options side by side",
@@ -790,7 +790,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2282fc49ca5383beb091",
-    session_id: "admin_personal_loans_session_001",
+    session_id: "SessionID_personal_loans",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "How fast is the approval process for a personal loan?",
@@ -802,7 +802,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2382fc49ca5383beb092",
-    session_id: "admin_personal_loans_session_001",
+    session_id: "SessionID_personal_loans",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Can I use a personal loan for home renovation?",
@@ -814,7 +814,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2482fc49ca5383beb093",
-    session_id: "admin_personal_banking_session_001",
+    session_id: "SessionID_personal_banking",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "What personal banking services does NPFCU offer?",
@@ -826,7 +826,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2582fc49ca5383beb094",
-    session_id: "admin_personal_banking_session_001",
+    session_id: "SessionID_personal_banking",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "What are the current rates for personal savings accounts?",
@@ -838,7 +838,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2682fc49ca5383beb095",
-    session_id: "admin_personal_banking_session_001",
+    session_id: "SessionID_personal_banking",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Is there a minimum balance requirement for checking accounts?",
@@ -850,7 +850,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2782fc49ca5383beb096",
-    session_id: "admin_rates_session_001",
+    session_id: "SessionID_rates_overview",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Can I see the full rate sheet for all NPFCU products?",
@@ -862,7 +862,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2882fc49ca5383beb097",
-    session_id: "admin_rates_session_001",
+    session_id: "SessionID_rates_overview",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "How often do you update your certificate of deposit rates?",
@@ -874,7 +874,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2982fc49ca5383beb098",
-    session_id: "admin_overview_session_001",
+    session_id: "SessionID_nazari_overview",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Give me an overview of Nazari / NPFCU",
@@ -886,7 +886,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2a82fc49ca5383beb099",
-    session_id: "admin_overview_session_001",
+    session_id: "SessionID_nazari_overview",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "What makes NPFCU different from traditional banks?",
@@ -898,7 +898,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2b82fc49ca5383beb09a",
-    session_id: "admin_overview_session_001",
+    session_id: "SessionID_nazari_overview",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "How do I become a member and what are the eligibility requirements?",
@@ -910,7 +910,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2c82fc49ca5383beb09b",
-    session_id: "admin_mortgage_session_001",
+    session_id: "SessionID_mortgage",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "What mortgage options does NPFCU offer for first-time home buyers?",
@@ -922,7 +922,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2d82fc49ca5383beb09c",
-    session_id: "admin_mortgage_session_001",
+    session_id: "SessionID_mortgage",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "How does the mortgage pre-approval process work?",
@@ -934,7 +934,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2e82fc49ca5383beb09d",
-    session_id: "admin_mortgage_session_001",
+    session_id: "SessionID_mortgage",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Can I lock in a mortgage rate and for how long?",
@@ -946,7 +946,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f2f82fc49ca5383beb09e",
-    session_id: "admin_credit_cards_session_001",
+    session_id: "SessionID_credit_cards",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Compare the different NPFCU credit card options",
@@ -958,7 +958,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f3082fc49ca5383beb09f",
-    session_id: "admin_credit_cards_session_001",
+    session_id: "SessionID_credit_cards",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "How do I report a lost or stolen NPFCU credit card?",
@@ -971,7 +971,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f3182fc49ca5383beb0a0",
-    session_id: "admin_credit_cards_session_001",
+    session_id: "SessionID_credit_cards",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "What is the credit limit I can qualify for?",
@@ -983,7 +983,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f3282fc49ca5383beb0a1",
-    session_id: "admin_cd_session_001",
+    session_id: "SessionID_cd_rates",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Tell me about certificate of deposit options at NPFCU",
@@ -995,7 +995,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f3382fc49ca5383beb0a2",
-    session_id: "admin_cd_session_001",
+    session_id: "SessionID_cd_rates",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "What happens if I withdraw from a CD early?",
@@ -1007,7 +1007,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f3482fc49ca5383beb0a3",
-    session_id: "admin_cd_session_001",
+    session_id: "SessionID_cd_rates",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Are NPFCU CDs renewable automatically?",
@@ -1019,7 +1019,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f3582fc49ca5383beb0a4",
-    session_id: "admin_online_banking_session_001",
+    session_id: "SessionID_online_banking",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "What features does NPFCU online banking offer?",
@@ -1031,7 +1031,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f3682fc49ca5383beb0a5",
-    session_id: "admin_online_banking_session_001",
+    session_id: "SessionID_online_banking",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "How do I set up mobile alerts for my accounts?",
@@ -1043,7 +1043,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f3782fc49ca5383beb0a6",
-    session_id: "admin_online_banking_session_001",
+    session_id: "SessionID_online_banking",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Is there a way to temporarily disable my debit card?",
@@ -1055,7 +1055,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f3882fc49ca5383beb0a7",
-    session_id: "admin_auto_loans_session_001",
+    session_id: "SessionID_auto_loans",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "What auto loan rates does NPFCU offer for new and used cars?",
@@ -1067,7 +1067,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f3982fc49ca5383beb0a8",
-    session_id: "admin_auto_loans_session_001",
+    session_id: "SessionID_auto_loans",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Can I get pre-approved for an auto loan before visiting the dealership?",
@@ -1079,7 +1079,7 @@ export const rawEntries = [
   },
   {
     _id: "6a3f3a82fc49ca5383beb0a9",
-    session_id: "admin_auto_loans_session_001",
+    session_id: "SessionID_auto_loans",
     user_email: "munam.ali@integrationxperts.com",
     role: userRoles["munam.ali@integrationxperts.com"],
     query: "Does NPFCU offer refinancing for existing auto loans?",
@@ -1091,7 +1091,7 @@ export const rawEntries = [
   },
   {
     _id: "docs_session_001",
-    session_id: "docs_explorer_session",
+    session_id: "SessionID_docs_explorer",
     user_email: "demo.user@integrationxperts.com",
     role: userRoles["demo.user@integrationxperts.com"] || "Tester",
     query: "Tell me about business loans offered by NPFCU",
@@ -1103,7 +1103,7 @@ export const rawEntries = [
   },
   {
     _id: "docs_session_002",
-    session_id: "docs_explorer_session",
+    session_id: "SessionID_docs_explorer",
     user_email: "demo.user@integrationxperts.com",
     role: userRoles["demo.user@integrationxperts.com"] || "Tester",
     query: "What education savings plans are available?",
@@ -1115,7 +1115,7 @@ export const rawEntries = [
   },
   {
     _id: "docs_session_003",
-    session_id: "docs_explorer_session",
+    session_id: "SessionID_docs_explorer",
     user_email: "demo.user@integrationxperts.com",
     role: userRoles["demo.user@integrationxperts.com"] || "Tester",
     query: "Give me an overview of Nazari and what NPFCU offers",
@@ -1127,7 +1127,7 @@ export const rawEntries = [
   },
   {
     _id: "docs_session_004",
-    session_id: "docs_explorer_session",
+    session_id: "SessionID_docs_explorer",
     user_email: "demo.user@integrationxperts.com",
     role: userRoles["demo.user@integrationxperts.com"] || "Tester",
     query: "What services are included in personal banking?",
@@ -1139,7 +1139,7 @@ export const rawEntries = [
   },
   {
     _id: "docs_session_005",
-    session_id: "docs_explorer_session",
+    session_id: "SessionID_docs_explorer",
     user_email: "demo.user@integrationxperts.com",
     role: userRoles["demo.user@integrationxperts.com"] || "Tester",
     query: "Compare the different personal loan options available",
@@ -1151,7 +1151,7 @@ export const rawEntries = [
   },
   {
     _id: "docs_session_006",
-    session_id: "docs_explorer_session",
+    session_id: "SessionID_docs_explorer",
     user_email: "demo.user@integrationxperts.com",
     role: userRoles["demo.user@integrationxperts.com"] || "Tester",
     query: "What are the current personal savings account rates?",
@@ -1163,7 +1163,7 @@ export const rawEntries = [
   },
   {
     _id: "docs_session_007",
-    session_id: "docs_explorer_session",
+    session_id: "SessionID_docs_explorer",
     user_email: "demo.user@integrationxperts.com",
     role: userRoles["demo.user@integrationxperts.com"] || "Tester",
     query: "Show me the latest rates from Nizari Credit Union",
@@ -1175,7 +1175,7 @@ export const rawEntries = [
   },
   {
     _id: "docs_session_008",
-    session_id: "docs_explorer_session",
+    session_id: "SessionID_docs_explorer",
     user_email: "demo.user@integrationxperts.com",
     role: userRoles["demo.user@integrationxperts.com"] || "Tester",
     query: "What can I use a personal loan for?",

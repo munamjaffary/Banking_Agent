@@ -245,6 +245,17 @@ const ChatArea = () => {
     toast.success("New conversation started");
   };
 
+  const suggestedQuestions = [
+    { label: "🏦 Business Loans", query: "Tell me about NPFCU business loan options" },
+    { label: "🎓 Education Savings", query: "What education savings plans does NPFCU offer?" },
+    { label: "📊 Current Rates", query: "Show me the current rates from Nizari Credit Union" },
+    { label: "🏠 Mortgage Options", query: "What mortgage options are available at NPFCU?" },
+    { label: "💳 Credit Cards", query: "Tell me about NPFCU credit card options" },
+    { label: "💰 Personal Loans", query: "Compare the different personal loan options" },
+    { label: "📱 Online Banking", query: "How do I set up online banking with NPFCU?" },
+    { label: "📈 Savings Accounts", query: "What are the current savings account rates?" },
+  ];
+
   return (
     <div className="chat-container">
       {activeConv?.messages?.length > 0 && (
@@ -324,7 +335,7 @@ const ChatArea = () => {
                       ),
                     }}
                   >
-                    {msg.content?.replace(/^[ \t]*(•|\*)\s*/gm, "- ")}
+                    {msg.content?.replace(/^[ \t]*(•|\*)\s*/gm, "- ").split("\n").map(l => l.trim()).join("\n")}
                   </ReactMarkdown>
                 </div>
               )}
@@ -534,6 +545,23 @@ const ChatArea = () => {
         ))}
         <div ref={messagesEndRef} />
       </div>
+
+      {sessionId && (
+      <div className="suggested-questions">
+        <div className="sq-title">Try asking about:</div>
+        <div className="sq-grid">
+          {suggestedQuestions.map((q, i) => (
+            <button
+              key={i}
+              className="sq-chip"
+              onClick={() => handleSend(q.query)}
+            >
+              {q.label}
+            </button>
+          ))}
+        </div>
+      </div>
+      )}
 
       <div className="chat-input-section">
         <div className="input-wrapper">

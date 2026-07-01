@@ -55,10 +55,8 @@ function SessionCard({ session, expanded, onToggle, viewMode }) {
       <div className="nlu-session-header" onClick={onToggle}>
         <div className="nlu-session-info">
           <div className="nlu-session-user">
-            <span className="nlu-session-id">
-              {session.session_id.length > 35
-                ? session.session_id.slice(0, 35) + "..."
-                : session.session_id}
+            <span className="nlu-session-id" title={session.session_id}>
+              {session.session_id}
             </span>
           </div>
           <div className="nlu-session-stats">
