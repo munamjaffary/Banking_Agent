@@ -147,8 +147,8 @@ function DashboardAnalytics() {
             <span>Distribution across knowledge base categories</span>
           </div>
           <div className="kb-chart-body">
-            <div style={{ height: 240, display: "flex", justifyContent: "center" }}>
-              <div style={{ width: 240 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 24, height: 300 }}>
+              <div style={{ flex: "0 0 auto", width: 200, height: 280 }}>
                 <Doughnut
                   data={{
                     labels: categoryCounts.labels,
@@ -163,13 +163,23 @@ function DashboardAnalytics() {
                     maintainAspectRatio: false,
                     cutout: "60%",
                     plugins: {
-                      legend: {
-                        position: "bottom",
-                        labels: { padding: 12, usePointStyle: true },
-                      },
+                      legend: { display: false },
                     },
                   }}
                 />
+              </div>
+              <div style={{ flex: "0 0 auto" }}>
+                {categoryCounts.labels.map((label, i) => {
+                  const total = categoryCounts.data.reduce((a, b) => a + b, 0);
+                  const pct = ((categoryCounts.data[i] / total) * 100).toFixed(1);
+                  return (
+                    <div key={label} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, fontSize: 13, color: "var(--text, #333)" }}>
+                      <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: "50%", backgroundColor: ["#008fd5", "#009591", "#8b5cf6", "#f59e0b", "#10b981", "#ef4444", "#6366f1"][i % 7] }} />
+                      <span style={{ fontWeight: 500 }}>{label}</span>
+                      <span style={{ color: "var(--text-secondary, #666)", marginLeft: "auto" }}>{pct}%</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

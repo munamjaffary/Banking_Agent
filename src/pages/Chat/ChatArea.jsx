@@ -254,6 +254,7 @@ const ChatArea = () => {
     { label: "💰 Personal Loans", query: "Compare the different personal loan options" },
     { label: "📱 Online Banking", query: "How do I set up online banking with NPFCU?" },
     { label: "📈 Savings Accounts", query: "What are the current savings account rates?" },
+    { label: "👤 Talk to an Agent", query: "I want to speak with a human agent" },
   ];
 
   return (

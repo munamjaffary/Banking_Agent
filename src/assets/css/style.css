@@ -3554,8 +3554,8 @@ LOADING
   position: fixed;
   bottom: 92px;
   right: 24px;
-  width: 380px;
-  height: 560px;
+  width: 480px;
+  height: 700px;
   max-height: calc(100vh - 140px);
   background: #FFFFFF;
   border-radius: 16px;
@@ -3690,8 +3690,8 @@ LOADING
 }
 
 .npfcucw-msg-user .npfcucw-msg-bubble {
-  background: var(--primary-light);
-  color: #FFFFFF;
+  background: #1A423E;
+  color: #F0EDE4;
   border-bottom-right-radius: 4px;
 }
 
@@ -3731,8 +3731,8 @@ LOADING
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  border-top: 1px solid #D9D1BF;
-  background: #FFFFFF;
+  border-top: 1px solid #2A4A46;
+  background: #0E2B27;
   flex-shrink: 0;
 }
 
@@ -3747,8 +3747,11 @@ LOADING
   padding: 10px 14px;
   font-size: var(--font-size-14px);
   outline: none;
-  background: #FBF9F4;
-  color: #3F3D38;
+  background: #2D5A54;
+  color: #F5F0E8;
+}
+.npfcucw-input::placeholder {
+  color: #B0C5C2;
 }
 
 .npfcucw-input:focus {
@@ -3764,7 +3767,7 @@ LOADING
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: #0E3B36;
+  background: #4A8B82;
   color: #F5F1E8;
   border: none;
   cursor: pointer;
@@ -3776,7 +3779,7 @@ LOADING
 }
 
 .npfcucw-send:hover {
-  background: #0A2C28;
+  background: #3D756D;
 }
 
 .npfcucw-send:disabled {
