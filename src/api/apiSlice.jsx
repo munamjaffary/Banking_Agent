@@ -54,7 +54,13 @@ export const apiSlice = createApi({
     blobRequest: builder.query({
       query: ({ endpoint, params }) => ({
         url: params ? `${endpoint}${dataToQueryParameter(params)}` : endpoint,
-        responseHandler: (res) => res.blob(),
+        responseHandler: async (res) => {
+          if (!res.ok) {
+            const text = await res.text();
+            throw new Error(text || `Request failed with status ${res.status}`);
+          }
+          return res.blob();
+        },
       }),
     }),
 
@@ -63,7 +69,14 @@ export const apiSlice = createApi({
         url: params ? `${endpoint}${dataToQueryParameter(params)}` : endpoint,
         method: "POST",
         body: body,
-        responseHandler: (res) => res.blob(),
+        responseHandler: async (res) => {
+          if (!res.ok) {
+            let errMsg = `Request failed with status ${res.status}`;
+            try { const j = await res.json(); errMsg = j?.detail || j?.message || errMsg; } catch {}
+            throw new Error(errMsg);
+          }
+          return res.blob();
+        },
       }),
     }),
   }),

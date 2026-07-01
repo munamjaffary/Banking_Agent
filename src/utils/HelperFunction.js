@@ -34,13 +34,14 @@ export const downloadFileFromBlob = (blob, fileName) => {
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
-  toast.success("File Downloaded Successfully");
 };
 
 export const getErrorMessage = (
   error,
   fallback = "An unexpected error occurred",
 ) => {
+  if (!error) return fallback;
+  if (typeof error === "string") return error;
   const serverError = error?.data || error?.response?.data || error;
   if (serverError?.detail) {
     if (Array.isArray(serverError.detail)) {
@@ -48,5 +49,7 @@ export const getErrorMessage = (
     }
     return serverError.detail;
   }
-  return serverError?.message || fallback;
+  if (serverError?.message) return serverError.message;
+  if (error?.error) return typeof error.error === "string" ? error.error : fallback;
+  return fallback;
 };

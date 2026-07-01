@@ -108,6 +108,28 @@ const ChatArea = () => {
       }),
     );
 
+    const staticAnswer = staticAnswers[val.toLowerCase()];
+    if (staticAnswer) {
+      dispatch(
+        updateLastMessage({ convId: activeConvId, content: staticAnswer }),
+      );
+      dispatch(
+        addNluEntry({
+          _id: `live_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+          session_id: sessionId,
+          user_email: user?.email || "anonymous@guest",
+          role: userRoles[user?.email] || "User",
+          query: val,
+          response: staticAnswer,
+          references: [],
+          timestamp: new Date().toISOString(),
+          intents: detectIntent(val),
+          handoff: false,
+        }),
+      );
+      return;
+    }
+
     await streamChat({
       endpoint: endpoints.chat.response,
       data: { query: val },
@@ -178,6 +200,7 @@ const ChatArea = () => {
         downloadFileFromBlob(res, ref.document_name);
       }
     } catch (error) {
+      console.error("Reference action failed:", error);
       toast.error(getErrorMessage(error));
     }
   };
@@ -255,7 +278,14 @@ const ChatArea = () => {
     { label: "📱 Online Banking", query: "How do I set up online banking with NPFCU?" },
     { label: "📈 Savings Accounts", query: "What are the current savings account rates?" },
     { label: "👤 Talk to an Agent", query: "I want to speak with a human agent" },
+    { label: "🔄 Older Auto Loan Rate", query: "what is the older auto loan rate?" },
+    { label: "🆕 Newer Auto Loan Rate", query: "what is the newer auto loan rate?" },
   ];
+
+  const staticAnswers = {
+    "what is the older auto loan rate?": "the older auto loan rates: 5.75%",
+    "what is the newer auto loan rate?": "the new auto lan rates: 5.85%",
+  };
 
   return (
     <div className="chat-container">

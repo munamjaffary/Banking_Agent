@@ -6,7 +6,7 @@ export const dataToQueryParameter = (data) => {
             if (dataArray.length > 0) {
                 dataArray.forEach((entry, index) => {
                     var amp = index < dataArray.length - 1 ? "&" : "";
-                    params = `${params}${entry[0]}=${entry[1]}${amp}`;
+                    params = `${params}${entry[0]}=${encodeURIComponent(entry[1])}${amp}`;
                 });
                 return params;
             }

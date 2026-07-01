@@ -63,7 +63,14 @@ function NPFCUChatWidget() {
     { label: "💳 Credit Cards", query: "Tell me about NPFCU credit card options" },
     { label: "💰 Personal Loans", query: "Compare the different personal loan options" },
     { label: "👤 Talk to an Agent", query: "I want to speak with a human agent" },
+    { label: "🔄 Older Auto Loan Rate", query: "what is the older auto loan rate?" },
+    { label: "🆕 Newer Auto Loan Rate", query: "what is the newer auto loan rate?" },
   ];
+
+  const staticAnswers = {
+    "what is the older auto loan rate?": "the older auto loan rates: 5.75%",
+    "what is the newer auto loan rate?": "the new auto lan rates: 5.85%",
+  };
 
   const handleSend = useCallback(async (overrideText) => {
     const val = (typeof overrideText === "string" ? overrideText : input).trim();
@@ -85,6 +92,14 @@ function NPFCUChatWidget() {
       convId: activeConvId,
       message: { role: "assistant", content: "", references: [] },
     }));
+
+    const staticAnswer = staticAnswers[val.toLowerCase()];
+    if (staticAnswer) {
+      dispatch(
+        updateLastMessage({ convId: activeConvId, content: staticAnswer }),
+      );
+      return;
+    }
 
     const controller = new AbortController();
     setAbortController(controller);
@@ -174,7 +189,7 @@ function NPFCUChatWidget() {
 
   const handleRefAction = async (ref, actionType) => {
     try {
-      const headers = { "Content-Type": "application/json" };
+      const headers = { "Content-Type": "application/json", Accept: "application/json" };
       if (token && token !== "guest-session") {
         headers.Authorization = `Bearer ${token}`;
       }
@@ -183,6 +198,11 @@ function NPFCUChatWidget() {
         headers,
         body: JSON.stringify({ "Document Name": ref.document_name, Page: ref.page }),
       });
+      if (!res.ok) {
+        let errMsg = `Request failed with status ${res.status}`;
+        try { const j = await res.json(); errMsg = j?.detail || j?.message || errMsg; } catch {}
+        throw new Error(errMsg);
+      }
       const blob = await res.blob();
       if (actionType === "view") {
         const url = URL.createObjectURL(blob);
@@ -191,6 +211,7 @@ function NPFCUChatWidget() {
         downloadFileFromBlob(blob, ref.document_name);
       }
     } catch (err) {
+      console.error("Ref action error:", err);
       toast.error(getErrorMessage(err));
     }
   };
