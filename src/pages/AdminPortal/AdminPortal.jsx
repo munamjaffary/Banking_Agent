@@ -255,7 +255,7 @@ function AdminPortal() {
     <div style={{ fontFamily: "'Public Sans', system-ui, sans-serif", color: "#1B1A16", display: "flex", minHeight: "100vh", background: "#F4F1EA" }}>
       <aside style={sidebarStyles.aside}>
         <div style={sidebarStyles.logo}>
-          <img src={NazariLogo} alt="Nazari" style={{ height: "34px", width: "auto" }} />
+          <img src={NazariLogo} alt="Nazari" style={{ height: "34px", width: "auto", background: "#F5F1E8", padding: "6px 10px", borderRadius: "6px" }} />
         </div>
         <nav style={sidebarStyles.nav}>
           <div style={sidebarStyles.sectionLabel}>Workspace</div>

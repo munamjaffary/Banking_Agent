@@ -136,7 +136,7 @@ function NPFCULayout({ children }) {
         </div>
       </header>
 
-      <main id="main" className="zoomable" style={{ flex: 1, overflowY: "auto" }}>
+      <main id="main" className="zoomable" style={{ flex: 1 }}>
         {children}
       </main>
 

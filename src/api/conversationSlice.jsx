@@ -116,6 +116,14 @@ const conversationSlice = createSlice({
       if (conv) conv.messages = [];
     },
 
+    truncateMessages: (state, action) => {
+      const { convId, fromIndex } = action.payload;
+      const conv = state.conversations.find((c) => c.id === convId);
+      if (conv) {
+        conv.messages = conv.messages.slice(0, fromIndex);
+      }
+    },
+
     addMessage: (state, action) => {
       const { convId, message } = action.payload;
       const conv = state.conversations.find((c) => c.id === convId);
@@ -154,6 +162,7 @@ export const {
   renameChat,
   deleteChat,
   clearMessages,
+  truncateMessages,
   addMessage,
   updateLastMessage,
 } = conversationSlice.actions;

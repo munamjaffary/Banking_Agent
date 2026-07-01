@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from "react";
+import { useSelector } from "react-redux";
 import SessionCard from "./components/SessionCard";
 import IntentSummary from "./components/IntentSummary";
 import { downloadCSV } from "../../utils/downloadCSV";
-import { rawEntries, groupBySession, userRoles } from "../../data/nluData";
+import { rawEntries, groupBySession } from "../../data/nluData";
 
 const intentCategories = [
   { value: "all", label: "All Intents" },
@@ -32,12 +33,33 @@ function NLU() {
   const [expandedUserGroups, setExpandedUserGroups] = useState({});
   const [userIntentFilters, setUserIntentFilters] = useState({});
   const [viewMode, setViewMode] = useState("summary");
+  const [allExpanded, setAllExpanded] = useState(false);
+
+  const toggleAll = () => {
+    const next = !allExpanded;
+    setAllExpanded(next);
+    const groupState = {};
+    const sessionState = {};
+    filteredSessions.forEach((s) => {
+      groupState[s.user_email] = next;
+      sessionState[s.session_id] = next;
+    });
+    setExpandedUserGroups(groupState);
+    setExpandedSessions(sessionState);
+  };
 
   const toggleSession = (sessionId) => {
     setExpandedSessions((prev) => ({ ...prev, [sessionId]: !prev[sessionId] }));
   };
 
-  const sessions = useMemo(() => groupBySession(rawEntries), []);
+  const liveEntries = useSelector((state) => state.nlu.entries);
+
+  const allEntries = useMemo(
+    () => [...rawEntries, ...liveEntries],
+    [liveEntries],
+  );
+
+  const sessions = useMemo(() => groupBySession(allEntries), [allEntries]);
 
   const filteredSessions = useMemo(() => {
     return sessions
@@ -58,13 +80,13 @@ function NLU() {
   }, [sessions, searchQuery, intentFilter]);
 
   const stats = useMemo(() => {
-    const uniqueSessions = new Set(rawEntries.map((c) => c.session_id));
+    const uniqueSessions = new Set(allEntries.map((c) => c.session_id));
     const intentCounts = {};
     let handoffCount = 0;
     const dailyCounts = {};
     const userConversations = {};
 
-    rawEntries.forEach((c) => {
+    allEntries.forEach((c) => {
       c.intents.forEach((i) => {
         intentCounts[i.name] = (intentCounts[i.name] || 0) + 1;
       });
@@ -75,24 +97,26 @@ function NLU() {
         (userConversations[c.user_email] || 0) + 1;
     });
 
-    const sessions = groupBySession(rawEntries);
+    const sessions = groupBySession(allEntries);
     const msgCounts = sessions.map((s) => s.messageCount);
     const avgMsgsPerSession =
-      msgCounts.reduce((a, b) => a + b, 0) / msgCounts.length;
+      msgCounts.length > 0
+        ? msgCounts.reduce((a, b) => a + b, 0) / msgCounts.length
+        : 0;
 
     const dailyTrend = Object.entries(dailyCounts)
       .map(([date, count]) => ({ date, count }))
       .sort((a, b) => a.date.localeCompare(b.date));
 
     return {
-      totalConversations: rawEntries.length,
+      totalConversations: allEntries.length,
       uniqueSessions: uniqueSessions.size,
-      uniqueUsers: new Set(rawEntries.map((c) => c.user_email)).size,
+      uniqueUsers: new Set(allEntries.map((c) => c.user_email)).size,
       topIntent: Object.entries(intentCounts).sort((a, b) => b[1] - a[1])[0],
       intentCounts,
       handoffCount,
-      handoffRate: rawEntries.length
-        ? Math.round((handoffCount / rawEntries.length) * 100)
+      handoffRate: allEntries.length
+        ? Math.round((handoffCount / allEntries.length) * 100)
         : 0,
       avgMsgsPerSession: Math.round(avgMsgsPerSession * 10) / 10,
       dailyTrend,
@@ -100,7 +124,7 @@ function NLU() {
         .sort((a, b) => b[1] - a[1])
         .slice(0, 5),
     };
-  }, []);
+  }, [allEntries]);
 
   return (
     <main className="dashboard-container">
@@ -189,6 +213,17 @@ function NLU() {
               </div>
 
               <button
+                className="nlu-toggle-btn"
+                onClick={toggleAll}
+                title={allExpanded ? "Collapse all groups" : "Expand all groups"}
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d={allExpanded ? "M1 10L7 4L13 10" : "M1 4L7 10L13 4"} />
+                </svg>
+                {allExpanded ? "Collapse All" : "Expand All"}
+              </button>
+
+              <button
                 className="nlu-dl-btn"
                 onClick={() => {
                   const flat = filteredSessions.flatMap((s) =>
@@ -242,12 +277,6 @@ function NLU() {
               return groupEntries.map(([email, userSessions]) => {
                 const isOpen = expandedUserGroups[email] !== false;
                 const selIntent = userIntentFilters[email] || "all";
-                const colors = {
-                  Admin: "#8b5cf6",
-                  Manager: "#008fd5",
-                  Agent: "#009591",
-                  Analyst: "#f59e0b",
-                };
                 const allIntents = new Set();
                 let handoffCount = 0;
                 let aiCount = 0;

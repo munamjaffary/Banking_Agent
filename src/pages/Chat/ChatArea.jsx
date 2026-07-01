@@ -4,7 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { addMessage, updateLastMessage, createNewChat } from "../../api/conversationSlice";
+import { addMessage, updateLastMessage, createNewChat, truncateMessages } from "../../api/conversationSlice";
+import { addNluEntry, detectIntent } from "../../api/nluSlice";
+import { userRoles } from "../../data/nluData";
 import useChatManager from "../../hooks/useChatManager";
 import useVoiceChat from "../../hooks/useVoiceChat";
 import { useReferenceRequestMutation } from "../../api/apiSlice";
@@ -39,6 +41,7 @@ const ChatArea = () => {
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
   const thinkingTimerRef = useRef(null);
+  const assistantContentRef = useRef("");
   const [showRefs, setShowRefs] = useState({});
   const [thinkingPhase, setThinkingPhase] = useState("idle");
   const token = useSelector((state) => state.auth.token);
@@ -89,6 +92,7 @@ const ChatArea = () => {
     }
 
     setInput("");
+    assistantContentRef.current = "";
 
     dispatch(
       addMessage({
@@ -108,11 +112,29 @@ const ChatArea = () => {
       endpoint: endpoints.chat.response,
       data: { query: val },
       token: token,
-      onStream: (content) =>
-        dispatch(updateLastMessage({ convId: activeConvId, content })),
-      onComplete: (references) =>
-        references?.length &&
-        dispatch(updateLastMessage({ convId: activeConvId, references })),
+      onStream: (content) => {
+        assistantContentRef.current = content;
+        dispatch(updateLastMessage({ convId: activeConvId, content }));
+      },
+      onComplete: (references) => {
+        if (references?.length) {
+          dispatch(updateLastMessage({ convId: activeConvId, references }));
+        }
+        dispatch(
+          addNluEntry({
+            _id: `live_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+            session_id: sessionId,
+            user_email: user?.email || "anonymous@guest",
+            role: userRoles[user?.email] || "User",
+            query: val,
+            response: assistantContentRef.current,
+            references: references || [],
+            timestamp: new Date().toISOString(),
+            intents: detectIntent(val),
+            handoff: false,
+          }),
+        );
+      },
       onError: (err) => {
         const errorMessage = getErrorMessage(err);
         dispatch(
@@ -174,6 +196,10 @@ const ChatArea = () => {
     downloadFileFromBlob(blob, "response.txt");
   };
 
+  const inputRef = useRef(null);
+  const [editingIdx, setEditingIdx] = useState(null);
+  const [editText, setEditText] = useState("");
+
   const handleRetry = (msgIdx) => {
     const msg = activeConv.messages[msgIdx];
     if (msg.role === "user") {
@@ -190,6 +216,24 @@ const ChatArea = () => {
         break;
       }
     }
+  };
+
+  const handleEditMessage = (content, idx) => {
+    setEditingIdx(idx);
+    setEditText(content);
+  };
+
+  const handleEditCancel = () => {
+    setEditingIdx(null);
+    setEditText("");
+  };
+
+  const handleEditSubmit = () => {
+    if (!editText.trim()) return;
+    dispatch(truncateMessages({ convId: activeConvId, fromIndex: editingIdx }));
+    setEditingIdx(null);
+    setEditText("");
+    handleSend(editText.trim());
   };
 
   const toggleRefs = (idx) => {
@@ -239,6 +283,27 @@ const ChatArea = () => {
                 <span className="thinking-text">
                   {thinkingPhase === "fetching" ? "Fetching context..." : "Thinking..."}
                 </span>
+              ) : editingIdx === idx && msg.role === "user" ? (
+                <div className="message-content">
+                  <textarea
+                    className="edit-textarea"
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleEditSubmit();
+                      }
+                      if (e.key === "Escape") handleEditCancel();
+                    }}
+                    autoFocus
+                    rows={3}
+                  />
+                  <div className="edit-actions">
+                    <button className="edit-save-btn" onClick={handleEditSubmit}>Update</button>
+                    <button className="edit-cancel-btn" onClick={handleEditCancel}>Cancel</button>
+                  </div>
+                </div>
               ) : (
                 <div
                   className={`message-content ${
@@ -267,6 +332,17 @@ const ChatArea = () => {
 
             {msg.role === "user" && (
               <div className="msg-actions" style={{ justifyContent: "flex-end" }}>
+                <button
+                  onClick={() => handleEditMessage(msg.content, idx)}
+                  className="msg-action-btn"
+                  title="Edit"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg>
+                  <span className="btn-label">Edit</span>
+                </button>
                 <button
                   onClick={() => handleRetry(idx)}
                   className="msg-action-btn"
@@ -463,6 +539,7 @@ const ChatArea = () => {
         <div className="input-wrapper">
           <input
             type="text"
+            ref={inputRef}
             className="chat-input-field"
             placeholder={
               sessionId ? "Ask anything..." : "Initializing session..."

@@ -12,6 +12,7 @@ function NPFCUChatWidget() {
   const [input, setInput] = useState("");
   const [sessionId, setSessionId] = useState(null);
   const [abortController, setAbortController] = useState(null);
+  const [showRefs, setShowRefs] = useState({});
   const dispatch = useDispatch();
   const { conversations, activeConvId } = useSelector((state) => state.conversation);
   const token = useSelector((state) => state.auth.token);
@@ -19,7 +20,6 @@ function NPFCUChatWidget() {
   const navigate = useNavigate();
   const location = useLocation();
   const isLoggedIn = token && token !== "guest-session";
-  const isFullChat = location.pathname === "/portal/chat" || location.pathname.startsWith("/portal/admin");
   const [initSession] = useGenericMutation();
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -145,24 +145,22 @@ function NPFCUChatWidget() {
 
   return (
     <>
-      {!isFullChat && (
-        <button
-          className="npfcucw-trigger"
-          onClick={() => setOpen((p) => !p)}
-          aria-label="Toggle chat"
-        >
-          {open ? (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          ) : (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </svg>
-          )}
-        </button>
-      )}
+      <button
+        className="npfcucw-trigger"
+        onClick={() => setOpen((p) => !p)}
+        aria-label="Toggle chat"
+      >
+        {open ? (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        ) : (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+        )}
+      </button>
 
       {open && (
         <div className={`npfcucw-panel${!hasUserMessages ? " npfcucw-empty" : ""}`}>
@@ -185,7 +183,7 @@ function NPFCUChatWidget() {
                   </button>
                 </>
               )}
-              <button className="npfcucw-iconbtn" onClick={() => { setOpen(false); if (isLoggedIn) { dispatch(createNewChat()); navigate("/portal/admin?section=chat"); } else { navigate("/portal/chat"); } }} title="Open Full Chat">
+              <button className="npfcucw-iconbtn" onClick={() => { setOpen(false); if (isLoggedIn) { navigate("/portal/admin?section=chat"); } else { navigate("/portal/chat"); } }} title="Open Full Chat">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                   <polyline points="17 8 14 8 14 11" />
@@ -218,7 +216,28 @@ function NPFCUChatWidget() {
                   <div className="npfcucw-msg-avatar">◆</div>
                 )}
                 <div className="npfcucw-msg-bubble">
-                  {msg.content || (msg.role === "assistant" ? "Thinking..." : "")}
+                  <div>
+                    {msg.content || (msg.role === "assistant" ? "Thinking..." : "")}
+                  </div>
+                  {msg.role === "assistant" && msg.references?.length > 0 && msg.content && (
+                    <>
+                      <button
+                        className="npfcucw-refs-btn"
+                        onClick={() => setShowRefs((prev) => ({ ...prev, [i]: !prev[i] }))}
+                      >
+                        {showRefs[i] ? "Hide References" : `References (${msg.references.length})`}
+                      </button>
+                      {showRefs[i] && (
+                        <div className="npfcucw-refs-list">
+                          {msg.references.map((ref, rIdx) => (
+                            <div key={rIdx} className="npfcucw-ref-item">
+                              {ref.document_name || ref.title}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
               </div>
             ))}

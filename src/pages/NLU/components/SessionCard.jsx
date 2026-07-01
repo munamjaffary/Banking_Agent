@@ -50,42 +50,17 @@ function SessionCard({ session, expanded, onToggle, viewMode }) {
     msgPage * PAGE_SIZE,
   );
 
-  const roleColors = {
-    Admin: "#8b5cf6",
-    Manager: "#008fd5",
-    Agent: "#009591",
-    Analyst: "#f59e0b",
-  };
-
   return (
     <div className={`nlu-session-card ${expanded ? "is-expanded" : ""}`}>
       <div className="nlu-session-header" onClick={onToggle}>
         <div className="nlu-session-info">
           <div className="nlu-session-user">
-            <div className="nlu-avatar">
-              {session.user_email.charAt(0).toUpperCase()}
-            </div>
-            <div className="nlu-session-meta">
-              <span className="nlu-session-email">{session.user_email}</span>
-              <span className="nlu-session-id">
-                ID:{" "}
-                {session.session_id.length > 35
-                  ? session.session_id.slice(0, 35) + "..."
-                  : session.session_id}
-              </span>
-            </div>
-          </div>
-          {session.role && (
-            <span
-              className="nlu-role-badge"
-              style={{
-                backgroundColor:
-                  roleColors[session.role] || "#6b7280",
-              }}
-            >
-              {session.role}
+            <span className="nlu-session-id">
+              {session.session_id.length > 35
+                ? session.session_id.slice(0, 35) + "..."
+                : session.session_id}
             </span>
-          )}
+          </div>
           <div className="nlu-session-stats">
             <span className="nlu-stat-badge">
               {session.messageCount} message
