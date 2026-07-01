@@ -59,7 +59,7 @@ function NPFCUChatWidget() {
   }, [open]);
 
   const suggestedQuestions = [
-    { label: "🏦 Business Loans", query: "Tell me about NPFCU business loan options" },
+    { label: "🏦 Business Loans", query: "tell me about your business loans" },
     { label: "💳 Credit Cards", query: "Tell me about NPFCU credit card options" },
     { label: "💰 Personal Loans", query: "Compare the different personal loan options" },
     { label: "👤 Talk to an Agent", query: "I want to speak with a human agent" },

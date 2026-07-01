@@ -269,7 +269,7 @@ const ChatArea = () => {
   };
 
   const suggestedQuestions = [
-    { label: "🏦 Business Loans", query: "Tell me about NPFCU business loan options" },
+    { label: "🏦 Business Loans", query: "tell me about your business loans" },
     { label: "🎓 Education Savings", query: "What education savings plans does NPFCU offer?" },
     { label: "📊 Current Rates", query: "Show me the current rates from Nizari Credit Union" },
     { label: "🏠 Mortgage Options", query: "What mortgage options are available at NPFCU?" },
